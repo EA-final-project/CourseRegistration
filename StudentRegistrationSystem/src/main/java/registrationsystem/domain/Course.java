@@ -1,9 +1,6 @@
 package registrationsystem.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Getter
 @Setter
@@ -25,9 +23,4 @@ public class Course {
     private String name;
     private String description;
 
-    public Course(String code, String name, String description) {
-        this.code = code;
-        this.name = name;
-        this.description = description;
-    }
 }

@@ -5,17 +5,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import javax.persistence.*;
+import java.util.Collection;
+
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Entity
 public class Registration {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private List<Student> students;
-    private List<CourseOffering> courseOfferings;
+    private Long studentId;
+    private Long courseOfferedId;
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "registration_student")
+    private Collection<Student> students;
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "registration_course")
+    private Collection<CourseOffering> courseOfferings;
 
-    public Registration(List<Student> students, List<CourseOffering> courseOfferings) {
-        this.students = students;
-        this.courseOfferings = courseOfferings;
-    }
 }

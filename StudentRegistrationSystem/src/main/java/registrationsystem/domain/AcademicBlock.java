@@ -1,10 +1,8 @@
 package registrationsystem.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import net.bytebuddy.asm.Advice;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +11,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Getter
 @Setter
@@ -26,14 +25,12 @@ public class AcademicBlock {
     private String code;
     private String name;
     private String semester;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+    /**
+     * fixme ---> each block has list of courses ==> use-case 2.
+     */
 
-    public AcademicBlock(String code, String name, String semester, LocalDate startDate, LocalDate endDate) {
-        this.code = code;
-        this.name = name;
-        this.semester = semester;
-        this.startDate = startDate;
-        this.endDate = endDate;
-    }
 }

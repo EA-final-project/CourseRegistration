@@ -1,16 +1,12 @@
 package registrationsystem.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Getter
 @Setter
@@ -21,13 +17,14 @@ public class CourseOffering {
     private Long id;
 
     private String code;
-    private Long capacity;
+    private int capacity;
     private int availableSeats;
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private Faculty faculty;
+    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    private Course course;
 
-    public CourseOffering(String code, Long capacity, int availableSeats) {
-        this.code = code;
-        this.capacity = capacity;
-        this.availableSeats = availableSeats;
+    public int calculateAvailableSeats(){
+     return  capacity - availableSeats;
     }
-
 }

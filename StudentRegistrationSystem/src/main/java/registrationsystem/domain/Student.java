@@ -1,13 +1,12 @@
 package registrationsystem.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Getter
 @Setter
@@ -17,18 +16,15 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Long studentId;
     private String name;
     private String email;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) //default joinColumn & eager
     private Address mailingAddress;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address homeAddress;
+    @OneToMany
+    @JoinColumn(name = "student_reg_request")
+    private Collection<RegistrationRequest> registrationRequests;
 
-    public Student(String name, String email, Address mailingAddress, Address homeAddress) {
-        this.name = name;
-        this.email = email;
-        this.mailingAddress = mailingAddress;
-        this.homeAddress = homeAddress;
-    }
 }
