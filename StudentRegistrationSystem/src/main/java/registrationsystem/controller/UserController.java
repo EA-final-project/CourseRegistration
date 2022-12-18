@@ -16,12 +16,6 @@ public class UserController {
     @Autowired
     private RegistrationEventService registrationEventService;
 
-    @GetMapping("/registration-events/latest")
-    public ResponseEntity<?> currentRegistrationEvent() {
-        var currentEvent = registrationEventService.recentRegistrationEvent();
-        return ResponseEntity.ok(currentEvent);
-    }
-
     @GetMapping("/registrations/list")
     public ResponseEntity<?> listRegistration() {
         var allList = registrationEventService.getAllRegistrationEvent();

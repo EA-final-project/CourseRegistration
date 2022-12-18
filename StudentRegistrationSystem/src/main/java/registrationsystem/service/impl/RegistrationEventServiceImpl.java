@@ -1,16 +1,16 @@
 package registrationsystem.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import registrationsystem.domain.Course;
-import registrationsystem.domain.RegistrationEvent;
-import registrationsystem.domain.RegistrationRequest;
-import registrationsystem.domain.RegistrationStatus;
+import registrationsystem.domain.*;
 import registrationsystem.repository.RegistrationEventRepository;
 import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.RegistrationEventService;
+import registrationsystem.service.dto.CourseOfferingDTO;
 import registrationsystem.service.dto.RegistrationEventDTO;
+import registrationsystem.service.dto.StudentDTO;
 import registrationsystem.service.dto.StudentDetailDTO;
 
 import java.time.LocalDate;
@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class RegistrationEventServiceImpl implements RegistrationEventService {
     @Autowired
     private RegistrationEventRepository registrationEventRepository;
@@ -73,16 +74,18 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     @Override
     public String recentRegistrationEvent() {
 
-        var latestEvent = registrationEventRepository.findFirstByOrderByStartDateDesc();
+        var latestEvent = registrationEventRepository.findFirstByOrderByStartDateAsc();
 
-        LocalDate currentTime = LocalDate.now();
+        int currentTime = LocalDate.now().getDayOfMonth(); // 18
+        int startDate = latestEvent.getStartDate().getDayOfMonth(); // 16
+        int endDate = latestEvent.getEndDate().getDayOfMonth(); //19
 
-        if (currentTime.isBefore(latestEvent.getStartDate()) && currentTime.isBefore(latestEvent.getEndDate())) {
-            return latestEvent + " " + RegistrationStatus.INPROGRESS;
-        } else if (currentTime.isAfter(latestEvent.getStartDate()) && currentTime.isAfter(latestEvent.getEndDate())) {
-            return latestEvent + " " + RegistrationStatus.CLOSED;
+        if (currentTime >= startDate && currentTime <= endDate) {
+            return "Start Date " + latestEvent.getStartDate() + ": End Date " + latestEvent.getEndDate() + " " + RegistrationStatus.OPEN;
+        } else if (currentTime > startDate && currentTime > endDate) {
+            return "Start Date " + latestEvent.getStartDate() + ": End Date " + latestEvent.getEndDate() + " " + RegistrationStatus.CLOSED;
         } else {
-            return latestEvent + " " + RegistrationStatus.OPEN;
+            return "Start Date " + latestEvent.getStartDate() + ": End Date " + latestEvent.getEndDate() + " " + RegistrationStatus.INPROGRESS;
         }
     }
 
@@ -95,16 +98,16 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         }
     }
 
-//    @Override
-//    public StudentDetailDTO readRegistrationEvent(Long studentId, String groupName) {
-//        var allEvent = registrationEventRepository.findAll();
-//        allEvent.stream()
-//                .flatMap(event -> event.getRegistrationGroups().stream())
-//                .filter(group -> group.getGroupName().equals(groupName))
-//                .flatMap(stu -> stu.getStudents().stream())
-//
-//
-//
-//    }
+    @Override
+    public Collection<CourseOfferingDTO> readRegistrationEvent(Long studentId, String groupName) {
+        var allEvent = registrationEventRepository.findById(studentId);
 
+        return allEvent.stream()
+                .flatMap(event -> event.getRegistrationGroups().stream())
+                .filter(group -> group.getGroupName().equals(groupName))
+                .flatMap(block -> block.getAcademicBlocks().stream())
+                .flatMap(stu -> stu.getCourseOfferings().stream())
+                .map(st -> modelMapper.map(st, CourseOfferingDTO.class))
+                .collect(Collectors.toList());
+    }
 }
