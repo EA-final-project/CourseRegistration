@@ -4,10 +4,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.Student;
+import registrationsystem.repository.RegistrationEventRepository;
+import registrationsystem.repository.RegistrationRepository;
 import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.StudentService;
+import registrationsystem.service.dto.CourseDTO;
+import registrationsystem.service.dto.RegistrationDTO;
 import registrationsystem.service.dto.StudentDTO;
-import registrationsystem.service.dto.StudentDetailDTO;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -18,6 +21,11 @@ public class StudentServiceImpl implements StudentService {
     private StudentRepository studentRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private RegistrationRepository registrationRepository;
+    @Autowired
+    private RegistrationEventRepository registrationEventRepository;
 
     @Override
     public void deleteStudent(Long id) {
@@ -34,6 +42,15 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Collection<RegistrationDTO> listRegistration() {
+        var allList = registrationRepository.findAll();
+
+        return allList.stream()
+                .map(list -> modelMapper.map(list, RegistrationDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void addStudent(Student student) {
         studentRepository.save(student);
     }
@@ -43,22 +60,6 @@ public class StudentServiceImpl implements StudentService {
         var student = studentRepository.findStudentByStudentId(studentId);
         return modelMapper.map(student, StudentDTO.class);
     }
-
-//    @Override
-//    public StudentDetailDTO readRegistrationEvent(Long studentID, String blockName) {
-//        var allStudent = studentRepository.findAll();
-//
-//        StudentDetailDTO detailDTO = new StudentDetailDTO();
-//
-//        for (Student student: allStudent){
-//            detailDTO.setStudentId(studentID);
-//            for()
-//        }
-//
-//
-//        return null;
-//    }
-
     @Override
     public StudentDTO updateStudent(Long studentId, Student student) {
         var foundStudent = studentRepository.findStudentByStudentId(studentId).get();
@@ -74,4 +75,24 @@ public class StudentServiceImpl implements StudentService {
         }
         return modelMapper.map(foundStudent, StudentDTO.class);
     }
+
+    @Override
+    public String readRegistrationEvent(Long studentId, String groupName) {
+        var registered = registrationEventRepository.readRegistrationEvent(studentId,groupName);
+        return registered;
+    }
+    //    @Override
+//    public StudentDetailDTO readRegistrationEvent(Long studentID, String blockName) {
+//        var allStudent = studentRepository.findAll();
+//
+//        StudentDetailDTO detailDTO = new StudentDetailDTO();
+//
+//        for (Student student: allStudent){
+//            detailDTO.setStudentId(studentID);
+//            for()
+//        }
+//
+//
+//        return null;
+//    }
 }
