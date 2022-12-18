@@ -3,18 +3,16 @@ package registrationsystem.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import registrationsystem.domain.Student;
-import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.RegistrationEventService;
-import registrationsystem.service.StudentService;
+import registrationsystem.service.UserService;
 
 @RestController
-public class StudentController {
+public class UserController {
 
     @Autowired
-    private StudentService studentService;
+    private UserService userService;
     @Autowired
     private RegistrationEventService registrationEventService;
 
@@ -32,28 +30,35 @@ public class StudentController {
 
     @GetMapping("/read-registrations/{studentId}/track")
     public ResponseEntity<?> readRegistration(@PathVariable Long studentId, @PathVariable String track) {
-        var result = studentService.readRegistrationEvent(studentId, track);
+        var result = userService.readRegistrationEvent(studentId, track);
         if (result == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(result);
     }
 
+    @PatchMapping("/read-registrations/{id}")
+    public ResponseEntity<?> processRequest(@PathVariable Long id, @RequestParam boolean isAdmin) {
+        userService.processRegistrationRequest(id,isAdmin);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
     /**
      * Student Controller start HERE
+     *
      * @param student
      * @return
      */
 
     @PostMapping("/students")
     public ResponseEntity<?> addStudent(@RequestBody Student student) {
-        studentService.addStudent(student);
+        userService.addStudent(student);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/students/get/{studentId}")
     public ResponseEntity<?> getStudent(@PathVariable Long studentId) {
-        var student = studentService.getStudent(studentId);
+        var student = userService.getStudent(studentId);
         if (student == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -61,13 +66,14 @@ public class StudentController {
     }
 
     @GetMapping("/students")
-    public ResponseEntity<?> getAllStudent(){
-        var allStudent = studentService.getAllStudents();
+    public ResponseEntity<?> getAllStudent() {
+        var allStudent = userService.getAllStudents();
         return ResponseEntity.ok(allStudent);
     }
+
     @PutMapping("/students/update/{studentId}")
     public ResponseEntity<?> updateStudent(@PathVariable Long studentId, @RequestBody Student student) {
-        var foundStudent = studentService.updateStudent(studentId, student);
+        var foundStudent = userService.updateStudent(studentId, student);
         if (foundStudent == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -76,7 +82,7 @@ public class StudentController {
 
     @DeleteMapping("/students/delete/{studentId}")
     public ResponseEntity<?> deleteStudent(@PathVariable Long studentId) {
-        studentService.deleteStudent(studentId);
+        userService.deleteStudent(studentId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

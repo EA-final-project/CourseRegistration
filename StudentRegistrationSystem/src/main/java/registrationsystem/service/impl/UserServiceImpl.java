@@ -3,12 +3,12 @@ package registrationsystem.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import registrationsystem.domain.RegistrationRequest;
 import registrationsystem.domain.Student;
 import registrationsystem.repository.RegistrationEventRepository;
 import registrationsystem.repository.RegistrationRepository;
 import registrationsystem.repository.StudentRepository;
-import registrationsystem.service.StudentService;
-import registrationsystem.service.dto.CourseDTO;
+import registrationsystem.service.UserService;
 import registrationsystem.service.dto.RegistrationDTO;
 import registrationsystem.service.dto.StudentDTO;
 
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
-public class StudentServiceImpl implements StudentService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
@@ -81,18 +81,12 @@ public class StudentServiceImpl implements StudentService {
         var registered = registrationEventRepository.readRegistrationEvent(studentId,groupName);
         return registered;
     }
-    //    @Override
-//    public StudentDetailDTO readRegistrationEvent(Long studentID, String blockName) {
-//        var allStudent = studentRepository.findAll();
-//
-//        StudentDetailDTO detailDTO = new StudentDetailDTO();
-//
-//        for (Student student: allStudent){
-//            detailDTO.setStudentId(studentID);
-//            for()
-//        }
-//
-//
-//        return null;
-//    }
+
+    @Override
+    public RegistrationDTO processRegistrationRequest(Long id, boolean isAdmin) {
+        /**
+         * Todo ----------------------->
+         */
+        return null;
+    }
 }

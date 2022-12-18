@@ -36,19 +36,22 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     @Override
     public RegistrationEventDTO updateRegistryEvent(Long id, RegistrationEvent registrationEvent) {
         var event = registrationEventRepository.findById(id).get();
-        if(event != null){
+        if (event != null) {
             event.setId(registrationEvent.getId());
             event.setStartDate(registrationEvent.getStartDate());
             event.setEndDate(registrationEvent.getEndDate());
             event.setRegistrationGroups(registrationEvent.getRegistrationGroups());
             registrationEventRepository.save(event);
         }
-        return modelMapper.map(event,RegistrationEventDTO.class);
+        return modelMapper.map(event, RegistrationEventDTO.class);
     }
 
     @Override
     public void submitRegistration(Collection<RegistrationRequest> requests, Collection<Course> courses) {
-
+/**
+ *
+ * todo              ----------------- ---->>>>>
+ */
     }
 
 
@@ -63,7 +66,7 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         var allEvents = registrationEventRepository.findAll();
 
         return allEvents.stream()
-                .map(events -> modelMapper.map(events,RegistrationEventDTO.class))
+                .map(events -> modelMapper.map(events, RegistrationEventDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -81,14 +84,13 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         } else {
             return latestEvent + " " + RegistrationStatus.OPEN;
         }
-
     }
 
     @Override
     public void deleteRegistryEvent(Long id) {
         var event = registrationEventRepository.findById(id);
 
-        if(event.isPresent()){
+        if (event.isPresent()) {
             registrationEventRepository.deleteById(id);
         }
     }
