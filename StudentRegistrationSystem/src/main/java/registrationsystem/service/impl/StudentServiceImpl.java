@@ -7,6 +7,7 @@ import registrationsystem.domain.Student;
 import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.StudentService;
 import registrationsystem.service.dto.StudentDTO;
+import registrationsystem.service.dto.StudentDetailDTO;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -42,6 +43,21 @@ public class StudentServiceImpl implements StudentService {
         var student = studentRepository.findStudentByStudentId(studentId);
         return modelMapper.map(student, StudentDTO.class);
     }
+
+//    @Override
+//    public StudentDetailDTO readRegistrationEvent(Long studentID, String blockName) {
+//        var allStudent = studentRepository.findAll();
+//
+//        StudentDetailDTO detailDTO = new StudentDetailDTO();
+//
+//        for (Student student: allStudent){
+//            detailDTO.setStudentId(studentID);
+//            for()
+//        }
+//
+//
+//        return null;
+//    }
 
     @Override
     public StudentDTO updateStudent(Long studentId, Student student) {

@@ -2,6 +2,7 @@ package registrationsystem.service;
 
 import registrationsystem.domain.Student;
 import registrationsystem.service.dto.StudentDTO;
+import registrationsystem.service.dto.StudentDetailDTO;
 
 import java.util.Collection;
 
@@ -12,4 +13,5 @@ public interface StudentService {
     void addStudent(Student student);
     StudentDTO getStudent(Long studentId);
     StudentDTO updateStudent(Long studentId, Student student);
+//    StudentDetailDTO readRegistrationEvent(Long studentId, String blockName);
 }

@@ -17,6 +17,7 @@ public class RegistrationGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String groupName;
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinColumn(name = "register_academic")
     private Collection<AcademicBlock> academicBlocks = new ArrayList<>();

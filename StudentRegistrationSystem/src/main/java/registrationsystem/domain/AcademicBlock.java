@@ -4,11 +4,9 @@ import lombok.*;
 import net.bytebuddy.asm.Advice;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,8 +27,7 @@ public class AcademicBlock {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    /**
-     * fixme ---> each block has list of courses ==> use-case 2.
-     */
-
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "block_Course")
+    private Collection<CourseOffering> courseOfferings;
 }
