@@ -19,7 +19,7 @@ import java.util.Collection;
 @Setter
 public class StudentDTO {
     private Long id;
-    private Long studentId;
+    private String studentId;
     private String name;
     private String email;
     private Address mailingAddress;

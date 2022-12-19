@@ -11,6 +11,7 @@ import registrationsystem.service.RegistrationEventService;
 @RestController
 @RequestMapping("/registrations")
 public class RegistrationEventController {
+
     @Autowired
     private RegistrationEventService registrationEventService;
 

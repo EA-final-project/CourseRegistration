@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.*;
+import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.repository.RegistrationEventRepository;
 import registrationsystem.repository.RegistrationRequestRepository;
 import registrationsystem.repository.StudentRepository;
@@ -44,6 +45,8 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
             event.setEndDate(registrationEvent.getEndDate());
             event.setRegistrationGroups(registrationEvent.getRegistrationGroups());
             registrationEventRepository.save(event);
+        } else {
+            throw new CourseExceptionHandler("Registration with id " + id + " not found");
         }
         return modelMapper.map(event, RegistrationEventDTO.class);
     }
@@ -54,15 +57,7 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         if (recentRegistrationEvent() == RegistrationStatus.OPEN) {
 
             for (RegistrationRequest request : requests) {
-                CourseOffering offering = request.getCourseOffering();
-
-                if (offering.getCourses().size() == 1) {
-                    Course selectedCourse = offering.getCourses().stream()
-                            .toList().stream()
-                            .findFirst().get();
-                    System.out.println("Selected Course " + selectedCourse);
-                    registrationRequestRepository.save(request);
-                }
+                registrationRequestRepository.save(request);
             }
         }
     }
@@ -70,6 +65,9 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     @Override
     public RegistrationEventDTO getRegistrationEvent(Long id) {
         var event = registrationEventRepository.findById(id);
+        if (event == null) {
+            throw new CourseExceptionHandler("Registration with id " + id + " not found");
+        }
         return modelMapper.map(event, RegistrationEventDTO.class);
     }
 
@@ -92,10 +90,13 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         int endDate = latestEvent.getEndDate().getDayOfMonth(); //19
 
         if (currentTime >= startDate && currentTime <= endDate) {
+            log.info("Open registration");
             return RegistrationStatus.OPEN;
         } else if (currentTime > startDate && currentTime > endDate) {
+            log.info("closed registration");
             return RegistrationStatus.CLOSED;
         } else {
+            log.info("In-progress registration");
             return RegistrationStatus.INPROGRESS;
         }
     }

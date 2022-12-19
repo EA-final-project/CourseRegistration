@@ -10,11 +10,10 @@ import registrationsystem.service.UserService;
 
 @RestController
 public class UserController {
-
-    @Autowired
-    private UserService userService;
     @Autowired
     private RegistrationEventService registrationEventService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/registrations/list")
     public ResponseEntity<?> listRegistration() {
@@ -31,9 +30,9 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @PatchMapping("/read-registrations/{id}")
-    public ResponseEntity<?> processRequest(@PathVariable Long id, @RequestParam boolean isAdmin) {
-        userService.processRegistrationRequest(id,isAdmin);
+    @PatchMapping("/registration-events/{id}")
+    public ResponseEntity<?> processRequest(@PathVariable Long id, @RequestParam boolean processed) {
+        userService.processRegistrationRequest(id,processed);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

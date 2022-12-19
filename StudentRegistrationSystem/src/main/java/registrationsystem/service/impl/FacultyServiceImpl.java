@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.Faculty;
+import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.repository.FacultyRepository;
 import registrationsystem.service.FacultyService;
 import registrationsystem.service.dto.FacultyDTO;
@@ -27,6 +28,9 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public FacultyDTO getFaculty(Long id) {
         var faculty = facultyRepository.findById(id).get();
+        if(faculty == null){
+            throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
+        }
         return modelMapper.map(faculty,FacultyDTO.class);
     }
 
@@ -48,11 +52,17 @@ public class FacultyServiceImpl implements FacultyService {
             updateFaculty.setName(faculty.getName());
             updateFaculty.setTitle(faculty.getTitle());
             facultyRepository.save(updateFaculty);
+        } else {
+            throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
         }
         return modelMapper.map(updateFaculty, FacultyDTO.class);
     }
     @Override
     public void deleteFaculty(Long id) {
+        var toDelete = facultyRepository.findById(id);
+        if(toDelete == null){
+            throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
+        }
         facultyRepository.deleteById(id);
     }
 }

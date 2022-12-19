@@ -10,6 +10,7 @@ import registrationsystem.service.CourseOfferingService;
 @RestController
 @RequestMapping("/course-offers")
 public class CourseOfferingController {
+
     @Autowired
     private CourseOfferingService service;
 

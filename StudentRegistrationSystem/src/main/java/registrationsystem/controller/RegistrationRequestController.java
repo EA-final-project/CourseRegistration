@@ -10,10 +10,11 @@ import registrationsystem.service.RegistrationRequestService;
 @RestController
 @RequestMapping("/registration-requests")
 public class RegistrationRequestController {
+
     @Autowired
     private RegistrationRequestService service;
 
-    @PostMapping
+    @PostMapping("/submit")
     public ResponseEntity<?> addRequest(@RequestBody RegistrationRequest request) {
         service.addRegistrationRequest(request);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);

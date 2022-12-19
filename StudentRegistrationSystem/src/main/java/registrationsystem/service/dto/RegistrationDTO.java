@@ -17,7 +17,7 @@ import java.util.Collection;
 @Setter
 public class RegistrationDTO {
     private Long id;
-    private Long studentId;
+    private String studentId;
     private String name;
     private String email;
     private Address mailingAddress;

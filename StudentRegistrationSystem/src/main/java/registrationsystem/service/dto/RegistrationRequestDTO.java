@@ -12,4 +12,5 @@ import registrationsystem.domain.Student;
 public class RegistrationRequestDTO {
     private Long id;
     private int priorityNumber;
+    private CourseOffering courseOffering;
 }

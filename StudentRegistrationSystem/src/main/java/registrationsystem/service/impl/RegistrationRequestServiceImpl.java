@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.RegistrationRequest;
+import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.repository.RegistrationRequestRepository;
 import registrationsystem.service.RegistrationRequestService;
 import registrationsystem.service.dto.RegistrationRequestDTO;
@@ -29,6 +30,9 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
     @Override
     public RegistrationRequestDTO getRegistrationRequest(Long id) {
         var request = repository.findById(id);
+        if(request == null){
+           throw new CourseExceptionHandler("Registration Request with id "+ id + " not found");
+        }
         return modelMapper.map(request, RegistrationRequestDTO.class);
     }
 
@@ -54,6 +58,8 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
             updateRequest.setId(request.getId());
             updateRequest.setPriorityNumber(request.getPriorityNumber());
             repository.save(updateRequest);
+        } else {
+            throw new CourseExceptionHandler("Registration Request with id "+ id + " not found");
         }
         return modelMapper.map(updateRequest, RegistrationRequestDTO.class);
     }

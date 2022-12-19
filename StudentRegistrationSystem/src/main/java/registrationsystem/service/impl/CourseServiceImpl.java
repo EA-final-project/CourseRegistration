@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.Course;
+import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.repository.CourseRepository;
 import registrationsystem.service.CourseService;
 import registrationsystem.service.dto.CourseDTO;
@@ -29,12 +30,16 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseDTO getCourse(Long id) {
         var course = courseRepository.findById(id);
+        if(course == null){
+            throw new CourseExceptionHandler("Course with id  "+ id + " not found");
+        }
         return modelMapper.map(course, CourseDTO.class);
     }
 
     @Override
     public void addCourse(Course course) {
         courseRepository.save(course);
+        log.info("new course added");
     }
 
     @Override
@@ -46,6 +51,8 @@ public class CourseServiceImpl implements CourseService {
             foundCourse.setName(course.getName());
             foundCourse.setDescription(course.getDescription());
             courseRepository.save(foundCourse);
+        } else {
+            throw new CourseExceptionHandler("Course with id : "+ id + " not found");
         }
         return modelMapper.map(foundCourse, CourseDTO.class);
     }
@@ -62,6 +69,9 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public CourseDTO getCourseByCode(String code) {
         var course = courseRepository.findCourseByCode(code).get();
+        if(course == null){
+            throw new CourseExceptionHandler("Course with code "+ code + " not found");
+        }
         return modelMapper.map(course, CourseDTO.class);
     }
 }

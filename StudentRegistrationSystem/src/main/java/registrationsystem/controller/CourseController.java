@@ -12,6 +12,7 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
+
     @PostMapping
     public ResponseEntity<?> addCourse(@RequestBody Course course){
         courseService.addCourse(course);

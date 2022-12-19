@@ -10,6 +10,7 @@ import registrationsystem.service.FacultyService;
 @RestController
 @RequestMapping("/faculties")
 public class FacultyController {
+
     @Autowired
     private FacultyService facultyService;
 

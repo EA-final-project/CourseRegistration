@@ -7,15 +7,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="EmailServiceSystem" />
         <module name="StudentRegistrationSystem" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="EmailServiceSystem" target="17" />
       <module name="StudentRegistrationSystem" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="EmailServiceSystem" options="-parameters" />
       <module name="StudentRegistrationSystem" options="-parameters" />
     </option>
   </component>

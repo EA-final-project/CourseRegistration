@@ -15,6 +15,6 @@ public interface CourseOfferingService {
     void addCourseOffer(CourseOffering courseOffering);
     Collection<CourseOfferingDTO> getAllCourseOffers();
     CourseOfferingDTO updateCourseOffer(Long id,CourseOffering courseOffering);
-    HashMap<Boolean, Course> selectCourse(Collection<Course> listCourse, String code);
+   // HashMap<Boolean, Course> selectCourse(Collection<Course> listCourse, String code);
 
 }
