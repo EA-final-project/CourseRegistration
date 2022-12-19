@@ -17,14 +17,16 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String studentId;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) //default joinColumn & eager
+    @ManyToOne //(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) //default joinColumn & eager
     private Address mailingAddress;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne //(cascade = CascadeType.MERGE)
     private Address homeAddress;
-    @OneToMany
-    @JoinColumn(name = "student_reg_request")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "student_registrationrequest")
     private Collection<RegistrationRequest> registrationRequests;
-
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, mappedBy = "students")
+    private Collection<RegistrationGroup> registrationGroups;
 }

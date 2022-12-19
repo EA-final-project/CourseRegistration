@@ -13,16 +13,15 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "registrationgroup")
 public class RegistrationGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String groupName;
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "register_academic")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "registrationgroup_academicblocks")
     private Collection<AcademicBlock> academicBlocks = new ArrayList<>();
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "register_student")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Collection<Student> students;
 
 }

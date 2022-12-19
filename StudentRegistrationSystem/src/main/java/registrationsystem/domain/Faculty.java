@@ -18,7 +18,8 @@ public class Faculty {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String fistName;
+    private String lastName;
     private String email;
     private String title;
 

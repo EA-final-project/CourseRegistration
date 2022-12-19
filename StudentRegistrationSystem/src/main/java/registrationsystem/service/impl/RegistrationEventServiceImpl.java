@@ -116,7 +116,7 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
 
         return allEvent.stream()
                 .flatMap(event -> event.getRegistrationGroups().stream())
-                .filter(group -> group.getGroupName().equals(groupName))
+                //.filter(group -> group.getGroupName().equals(groupName))  //fixme ---------------------->
                 .flatMap(block -> block.getAcademicBlocks().stream())
                 .flatMap(stu -> stu.getCourseOfferings().stream())
                 .map(st -> modelMapper.map(st, CourseOfferingDTO.class))

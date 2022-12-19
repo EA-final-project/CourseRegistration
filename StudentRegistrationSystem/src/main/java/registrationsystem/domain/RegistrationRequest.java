@@ -12,13 +12,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "registrationrequest")
 public class RegistrationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int priorityNumber;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "registrationrequest_courseoffering")
     private CourseOffering courseOffering;
 

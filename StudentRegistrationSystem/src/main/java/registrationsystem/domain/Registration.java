@@ -20,11 +20,11 @@ public class Registration {
 
     private String studentId;
     private Long courseOfferedId;
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "registration_student")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "registration_students")
     private Collection<Student> students;
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "registration_course")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "registration_courseoffering")
     private Collection<CourseOffering> courseOfferings;
 
 }

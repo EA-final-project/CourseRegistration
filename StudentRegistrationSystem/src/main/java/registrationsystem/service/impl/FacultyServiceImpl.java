@@ -49,7 +49,6 @@ public class FacultyServiceImpl implements FacultyService {
 
         if(updateFaculty != null){
             updateFaculty.setId(faculty.getId());
-            updateFaculty.setName(faculty.getName());
             updateFaculty.setTitle(faculty.getTitle());
             facultyRepository.save(updateFaculty);
         } else {

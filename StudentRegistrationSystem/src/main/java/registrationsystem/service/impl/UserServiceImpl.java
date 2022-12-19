@@ -76,7 +76,6 @@ public class UserServiceImpl implements UserService {
 
         if (foundStudent != null) {
             foundStudent.setStudentId(student.getStudentId());
-            foundStudent.setName(student.getName());
             foundStudent.setEmail(student.getEmail());
             foundStudent.setHomeAddress(student.getHomeAddress());
             foundStudent.setMailingAddress(student.getMailingAddress());
@@ -106,9 +105,9 @@ public class UserServiceImpl implements UserService {
             throw new CourseExceptionHandler("YOU ARE NOT ALLOWED TO PROCESS the Request");
         }
 
-        Registration registration = convertToRegistration.convertTORegistration(id);
+        //Registration registration = convertToRegistration.convertTORegistration(id);
 
-
+        Registration registration = new Registration(); //fixme ------>
         return modelMapper.map(registration, RegistrationDTO.class);
     }
 }

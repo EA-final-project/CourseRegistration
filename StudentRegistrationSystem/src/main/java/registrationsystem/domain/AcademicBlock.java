@@ -14,6 +14,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
+@Table(name = "academicblock")
 public class AcademicBlock {
 
     @Id
@@ -27,7 +28,8 @@ public class AcademicBlock {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "block_Course")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "academicblock_course")
     private Collection<CourseOffering> courseOfferings;
+
 }

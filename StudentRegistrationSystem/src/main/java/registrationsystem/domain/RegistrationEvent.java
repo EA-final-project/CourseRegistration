@@ -14,6 +14,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
+@Table(name = "registrationevent")
 public class RegistrationEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +23,8 @@ public class RegistrationEvent {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-    @JoinColumn(name = "RegisterEvent_group")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "RegisterEvent_registrationgroup")
     private Collection<RegistrationGroup> registrationGroups;
 
 }
