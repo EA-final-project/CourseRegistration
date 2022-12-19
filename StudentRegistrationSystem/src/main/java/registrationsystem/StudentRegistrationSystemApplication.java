@@ -19,6 +19,8 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
 
     @Autowired
     private RegistrationGroupRepository registrationGroupRepository;
+    @Autowired
+    private RegistrationEventRepository registrationEventRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(StudentRegistrationSystemApplication.class, args);
@@ -101,5 +103,18 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
         fppGroup.setStudents(fppStudents);
 
         registrationGroupRepository.save(fppGroup);
+
+        RegistrationEvent februaryEntry = new RegistrationEvent(null,LocalDate.of(2023, 02, 10),LocalDate.of(2023, 02, 20),registrationGroups);
+        RegistrationEvent aprilEntry = new RegistrationEvent(null,LocalDate.of(2023, 04, 10),LocalDate.of(2023, 04, 20),registrationGroups);
+        RegistrationEvent augustEntry = new RegistrationEvent(null,LocalDate.of(2023, 8, 10),LocalDate.of(2023, 8, 20),registrationGroups);
+        RegistrationEvent novemberEntry = new RegistrationEvent(null,LocalDate.of(2023, 11, 10),LocalDate.of(2023, 11, 20),registrationGroups);
+        //RegistrationEvent testingEvent = new RegistrationEvent(null,LocalDate.of(2022, 12, 10),LocalDate.of(2022, 12, 15),registrationGroups);
+
+        registrationEventRepository.save(februaryEntry);
+        registrationEventRepository.save(aprilEntry);
+        registrationEventRepository.save(augustEntry);
+        registrationEventRepository.save(novemberEntry);
+       // registrationEventRepository.save(testingEvent);
+
     }
 }

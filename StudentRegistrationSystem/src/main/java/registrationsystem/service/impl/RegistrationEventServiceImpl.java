@@ -85,14 +85,12 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
 
         var latestEvent = registrationEventRepository.findFirstByOrderByStartDateAsc();
 
-        int currentTime = LocalDate.now().getDayOfMonth(); // 18
-        int startDate = latestEvent.getStartDate().getDayOfMonth(); // 16
-        int endDate = latestEvent.getEndDate().getDayOfMonth(); //19
+        LocalDate currentTime = LocalDate.now(); // 18
 
-        if (currentTime >= startDate && currentTime <= endDate) {
+        if (currentTime.isAfter(latestEvent.getStartDate()) && currentTime.isBefore(latestEvent.getEndDate())) {
             log.info("Open registration");
             return RegistrationStatus.OPEN;
-        } else if (currentTime > startDate && currentTime > endDate) {
+        } else if (currentTime.isAfter(latestEvent.getStartDate()) && currentTime.isAfter(latestEvent.getEndDate())) {
             log.info("closed registration");
             return RegistrationStatus.CLOSED;
         } else {
