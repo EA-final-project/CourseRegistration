@@ -18,4 +18,8 @@ public class RegistrationRequest {
     private Long id;
     private int priorityNumber;
 
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    @JoinColumn(name = "registrationrequest_courseoffering")
+    private CourseOffering courseOffering;
+
 }

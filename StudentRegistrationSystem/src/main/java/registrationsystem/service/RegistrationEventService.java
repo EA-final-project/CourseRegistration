@@ -5,15 +5,17 @@ import registrationsystem.service.dto.*;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashMap;
 
 public interface RegistrationEventService {
 
-    String recentRegistrationEvent();
+    RegistrationStatus recentRegistrationEvent();
     void deleteRegistryEvent(Long id);
     RegistrationEventDTO getRegistrationEvent(Long id);
     Collection<RegistrationEventDTO> getAllRegistrationEvent();
     void addRegistrationEvent(RegistrationEvent registrationEvent);
     Collection<CourseOfferingDTO> readRegistrationEvent(Long studentId, String groupName);
     RegistrationEventDTO updateRegistryEvent(Long id, RegistrationEvent registrationEvent);
-    void submitRegistration(Collection<RegistrationRequest> requests, Collection<Course> courses);
+    void submitRegistration(Collection<RegistrationRequest> requests, HashMap<Boolean,Course> selected);
+
 }

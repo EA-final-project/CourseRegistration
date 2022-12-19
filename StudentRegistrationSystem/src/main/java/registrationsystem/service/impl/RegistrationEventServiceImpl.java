@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.*;
 import registrationsystem.repository.RegistrationEventRepository;
+import registrationsystem.repository.RegistrationRequestRepository;
 import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.RegistrationEventService;
 import registrationsystem.service.dto.CourseOfferingDTO;
@@ -15,6 +16,7 @@ import registrationsystem.service.dto.StudentDetailDTO;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,17 +24,16 @@ import java.util.stream.Collectors;
 public class RegistrationEventServiceImpl implements RegistrationEventService {
     @Autowired
     private RegistrationEventRepository registrationEventRepository;
+    @Autowired
+    private RegistrationRequestRepository registrationRequestRepository;
 
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private StudentRepository studentRepository;
 
     @Override
     public void addRegistrationEvent(RegistrationEvent registrationEvent) {
         registrationEventRepository.save(registrationEvent);
     }
-
 
     @Override
     public RegistrationEventDTO updateRegistryEvent(Long id, RegistrationEvent registrationEvent) {
@@ -48,13 +49,23 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     }
 
     @Override
-    public void submitRegistration(Collection<RegistrationRequest> requests, Collection<Course> courses) {
-/**
- *
- * todo              ----------------- ---->>>>>
- */
-    }
+    public void submitRegistration(Collection<RegistrationRequest> requests, HashMap<Boolean, Course> selected) {
 
+        if (recentRegistrationEvent() == RegistrationStatus.OPEN) {
+
+            for (RegistrationRequest request : requests) {
+                CourseOffering offering = request.getCourseOffering();
+
+                if (offering.getCourses().size() == 1) {
+                    Course selectedCourse = offering.getCourses().stream()
+                            .toList().stream()
+                            .findFirst().get();
+                    System.out.println("Selected Course " + selectedCourse);
+                    registrationRequestRepository.save(request);
+                }
+            }
+        }
+    }
 
     @Override
     public RegistrationEventDTO getRegistrationEvent(Long id) {
@@ -72,7 +83,7 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     }
 
     @Override
-    public String recentRegistrationEvent() {
+    public RegistrationStatus recentRegistrationEvent() {
 
         var latestEvent = registrationEventRepository.findFirstByOrderByStartDateAsc();
 
@@ -81,11 +92,11 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         int endDate = latestEvent.getEndDate().getDayOfMonth(); //19
 
         if (currentTime >= startDate && currentTime <= endDate) {
-            return "Start Date " + latestEvent.getStartDate() + ": End Date " + latestEvent.getEndDate() + " " + RegistrationStatus.OPEN;
+            return RegistrationStatus.OPEN;
         } else if (currentTime > startDate && currentTime > endDate) {
-            return "Start Date " + latestEvent.getStartDate() + ": End Date " + latestEvent.getEndDate() + " " + RegistrationStatus.CLOSED;
+            return RegistrationStatus.CLOSED;
         } else {
-            return "Start Date " + latestEvent.getStartDate() + ": End Date " + latestEvent.getEndDate() + " " + RegistrationStatus.INPROGRESS;
+            return RegistrationStatus.INPROGRESS;
         }
     }
 

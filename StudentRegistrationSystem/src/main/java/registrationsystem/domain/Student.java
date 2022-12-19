@@ -16,7 +16,7 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long studentId;
+    private String studentId;
     private String name;
     private String email;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) //default joinColumn & eager

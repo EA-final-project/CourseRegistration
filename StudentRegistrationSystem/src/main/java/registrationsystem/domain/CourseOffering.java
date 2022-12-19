@@ -21,11 +21,12 @@ public class CourseOffering {
     private int availableSeats;
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Faculty faculty;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Course course;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Collection<Course> courses;
 
     public int calculateAvailableSeats() {
         return capacity - availableSeats;
     }
+
 
 }
