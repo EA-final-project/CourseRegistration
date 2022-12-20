@@ -1,5 +1,7 @@
 package registrationsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +16,7 @@ import java.util.Collection;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String studentId;
     private String firstName;
@@ -24,9 +26,10 @@ public class Student {
     private Address mailingAddress;
     @ManyToOne //(cascade = CascadeType.MERGE)
     private Address homeAddress;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "student_registrationrequest")
+    //@JsonManagedReference
+    @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Collection<RegistrationRequest> registrationRequests;
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, mappedBy = "students")
+    @JsonBackReference
+    @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Collection<RegistrationGroup> registrationGroups;
 }

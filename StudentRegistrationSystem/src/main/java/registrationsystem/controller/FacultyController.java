@@ -20,7 +20,7 @@ public class FacultyController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //working
     public ResponseEntity<?> getFaculty(@PathVariable Long id) {
         var faculty = facultyService.getFaculty(id);
         if (faculty == null) {
@@ -29,7 +29,7 @@ public class FacultyController {
         return ResponseEntity.ok(faculty);
     }
 
-    @GetMapping
+    @GetMapping //working
     public ResponseEntity<?> getAllFaculties() {
         var listFaculties = facultyService.getAllFaculty();
         return ResponseEntity.ok(listFaculties);

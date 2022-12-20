@@ -1,5 +1,6 @@
 package registrationsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.Collection;
 @Table(name = "courseoffering")
 public class CourseOffering {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String code;
@@ -24,7 +25,9 @@ public class CourseOffering {
     private Faculty faculty;
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Course course;
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonBackReference
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "academicblock_courseoffering")
     private AcademicBlock academicBlock;
 
     private String initial;
@@ -41,10 +44,6 @@ public class CourseOffering {
 
     public int calculateAvailableSeats(int number) {
         return availableSeats = capacity - number;
-    }
-
-    public void setInitial(){
-        this.initial = this.faculty.getFistName().indexOf(0) + "" + this.faculty.getLastName().indexOf(0);
     }
 
 }

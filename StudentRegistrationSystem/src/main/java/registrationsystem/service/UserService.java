@@ -13,15 +13,15 @@ public interface UserService {
 
     void addStudent(Student student);
 
-    StudentDTO getStudent(Long studentId);
+    StudentDTO getStudent(String studentId);
 
     Collection<StudentDTO> getAllStudents();
 
-    Collection<RegistrationDTO> listRegistration();
+    Collection<RegistrationDTO> listRegistrations();
 
-    StudentDTO updateStudent(Long studentId, Student student);
+    StudentDTO updateStudent(String studentId, Student student);
 
-    String readRegistrationEvent(Long studentId, String groupName);
-    RegistrationDTO processRegistrationRequest(Long id, boolean isAdmin);
+//    String readRegistrationEvent(Long studentId, String groupName);
+    //RegistrationDTO processRegistrationRequest(Long id, boolean isAdmin);
     //    StudentDetailDTO readRegistrationEvent(Long studentId, String blockName);
 }

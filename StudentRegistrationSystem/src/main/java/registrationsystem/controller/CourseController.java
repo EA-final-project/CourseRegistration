@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import registrationsystem.domain.Course;
 import registrationsystem.service.CourseService;
+import registrationsystem.service.dto.CourseDTO;
+
 @RestController
 @RequestMapping("/courses")
 public class CourseController {
@@ -18,13 +20,13 @@ public class CourseController {
         courseService.addCourse(course);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //working
     public ResponseEntity<?> getCourse(@PathVariable Long id){
         var course = courseService.getCourse(id);
         if(course == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(courseService);
+        return ResponseEntity.ok(course);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCourse(@PathVariable Long id){
@@ -32,12 +34,12 @@ public class CourseController {
        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping
+    @GetMapping //working
     public ResponseEntity<?> getAllCourses(){
         var allCourses = courseService.getAllCourses();
         return ResponseEntity.ok(allCourses);
     }
-    @GetMapping("/get/{code}")
+    @GetMapping("/get/{code}") //working
     public ResponseEntity<?> getCourseByCode(@PathVariable String code){
         var course = courseService.getCourseByCode(code);
         if(course == null){

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import registrationsystem.domain.RegistrationRequest;
 import registrationsystem.service.RegistrationRequestService;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/registration-requests")
 public class RegistrationRequestController {
@@ -14,13 +16,13 @@ public class RegistrationRequestController {
     @Autowired
     private RegistrationRequestService service;
 
-    @PostMapping("/submit")
-    public ResponseEntity<?> addRequest(@RequestBody RegistrationRequest request) {
-        service.addRegistrationRequest(request);
+    @PostMapping("/submit/{studentId}")
+    public ResponseEntity<?> addRequest(@RequestBody Collection<RegistrationRequest> requests, @PathVariable  String studentId) {
+        service.saveRegistrationRequest(requests,studentId);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //working
     public ResponseEntity<?> getRequest(@PathVariable Long id) {
         var request = service.getRegistrationRequest(id);
         if (request == null) {
@@ -29,7 +31,7 @@ public class RegistrationRequestController {
         return ResponseEntity.ok(request);
     }
 
-    @GetMapping
+    @GetMapping //working
     public ResponseEntity<?> getAllRequests() {
         var allRequests = service.getAllRegistrationRequest();
         return ResponseEntity.ok(allRequests);

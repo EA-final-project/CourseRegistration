@@ -1,11 +1,13 @@
 package registrationsystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import net.bytebuddy.asm.Advice;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @NoArgsConstructor
@@ -18,7 +20,6 @@ import java.util.Collection;
 public class AcademicBlock {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String code;
@@ -28,8 +29,8 @@ public class AcademicBlock {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "academicblock_course")
-    private Collection<CourseOffering> courseOfferings;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "academicBlock",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Collection<CourseOffering> courseOfferings = new ArrayList<>();
 
 }

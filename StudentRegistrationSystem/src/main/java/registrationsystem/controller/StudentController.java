@@ -10,7 +10,7 @@ import registrationsystem.service.RegistrationEventService;
 public class StudentController {
     @Autowired
     private RegistrationEventService registrationEventService;
-    @GetMapping("/registration-events/latest")
+    @GetMapping("/registration-events/latest") //working
     public ResponseEntity<?> currentRegistrationEvent() {
         var currentEvent = registrationEventService.recentRegistrationEvent();
         return ResponseEntity.ok(currentEvent);

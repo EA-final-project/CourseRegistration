@@ -15,7 +15,7 @@ import java.util.Collection;
 @Entity
 public class Registration {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String studentId;

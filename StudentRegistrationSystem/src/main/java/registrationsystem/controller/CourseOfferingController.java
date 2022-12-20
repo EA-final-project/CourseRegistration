@@ -27,7 +27,7 @@ public class CourseOfferingController {
         }
         return ResponseEntity.ok(course);
     }
-    @GetMapping
+    @GetMapping //working
     public ResponseEntity<?> getAllCourseOffers(){
         var allOffers = service.getAllCourseOffers();
         return ResponseEntity.ok(allOffers);

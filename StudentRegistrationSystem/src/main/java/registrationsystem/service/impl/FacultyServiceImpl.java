@@ -28,6 +28,7 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public FacultyDTO getFaculty(Long id) {
         var faculty = facultyRepository.findById(id).get();
+
         if(faculty == null){
             throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
         }
@@ -49,7 +50,10 @@ public class FacultyServiceImpl implements FacultyService {
 
         if(updateFaculty != null){
             updateFaculty.setId(faculty.getId());
+            updateFaculty.setFistName(faculty.getFistName());
+            updateFaculty.setLastName(faculty.getLastName());
             updateFaculty.setTitle(faculty.getTitle());
+            updateFaculty.setEmail(faculty.getEmail());
             facultyRepository.save(updateFaculty);
         } else {
             throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
@@ -59,6 +63,7 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public void deleteFaculty(Long id) {
         var toDelete = facultyRepository.findById(id);
+
         if(toDelete == null){
             throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
         }

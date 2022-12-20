@@ -21,7 +21,7 @@ public class AcademicBlockController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") //working
     public ResponseEntity<?> getBlock(@PathVariable Long id) {
         var block = service.getBlock(id);
         if (block == null) {
@@ -30,7 +30,7 @@ public class AcademicBlockController {
         return ResponseEntity.ok(block);
     }
 
-    @GetMapping
+    @GetMapping //working
     public ResponseEntity<?> getAllBlocks() {
         var allBlocks = service.getAllBlocks();
         return ResponseEntity.ok(allBlocks);

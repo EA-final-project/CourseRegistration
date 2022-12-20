@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<RegistrationDTO> listRegistration() {
+    public Collection<RegistrationDTO> listRegistrations() {
         var allList = registrationRepository.findAll();
 
         return allList.stream()
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public StudentDTO getStudent(Long studentId) {
+    public StudentDTO getStudent(String studentId) {
         var student = studentRepository.findStudentByStudentId(studentId);
         if (student == null) {
             throw new CourseExceptionHandler("Student with id " + studentId + " not found");
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public StudentDTO updateStudent(Long studentId, Student student) {
+    public StudentDTO updateStudent(String studentId, Student student) {
         var foundStudent = studentRepository.findStudentByStudentId(studentId).get();
 
         if (foundStudent != null) {
@@ -87,27 +87,27 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(foundStudent, StudentDTO.class);
     }
 
-    @Override
-    public String readRegistrationEvent(Long studentId, String groupName) {
-        var registered = registrationEventRepository.readRegistrationEvent(studentId, groupName);
-        return registered;
-    }
+//    @Override
+//    public String readRegistrationEvent(Long studentId, String groupName) {
+//        var registered = registrationEventRepository.re
+//        return registered;
+//    }
 
-    @Override
-    public RegistrationDTO processRegistrationRequest(Long id, boolean isAdmin) {
-
-        var toProcess = studentRepository.findById(id);
-
-        if (toProcess == null) {
-            throw new CourseExceptionHandler("Student with id: " + id + " not found");
-        }
-        if (isAdmin == false) {
-            throw new CourseExceptionHandler("YOU ARE NOT ALLOWED TO PROCESS the Request");
-        }
-
-        //Registration registration = convertToRegistration.convertTORegistration(id);
-
-        Registration registration = new Registration(); //fixme ------>
-        return modelMapper.map(registration, RegistrationDTO.class);
-    }
+//    @Override
+//    public RegistrationDTO processRegistrationRequest(Long id, boolean isAdmin) {
+//
+//        var toProcess = studentRepository.findById(id);
+//
+//        if (toProcess == null) {
+//            throw new CourseExceptionHandler("Student with id: " + id + " not found");
+//        }
+//        if (isAdmin == false) {
+//            throw new CourseExceptionHandler("YOU ARE NOT ALLOWED TO PROCESS the Request");
+//        }
+//
+//        //Registration registration = convertToRegistration.convertTORegistration(id);
+//
+//        Registration registration = new Registration(); //fixme ------>
+//        return modelMapper.map(registration, RegistrationDTO.class);
+//    }
 }

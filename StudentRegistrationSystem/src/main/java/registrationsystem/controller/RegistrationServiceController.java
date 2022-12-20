@@ -8,12 +8,17 @@ import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.service.RegistrationService;
 
 @RestController
-@RequestMapping("/processed/registrations")
+@RequestMapping("/registrations")
 public class RegistrationServiceController {
     @Autowired
     private RegistrationService registrationService;
 
-
+    /**
+     * not fully working it should return teh processed registration but now return registrationevents ??????
+     * @param id
+     * @return
+     */
+    @GetMapping("/get/{id}")
     public ResponseEntity<?> getRegistration(@PathVariable Long id) {
         var registration = registrationService.getRegistration(id);
         if (registration == null) {
@@ -22,7 +27,7 @@ public class RegistrationServiceController {
         return ResponseEntity.ok(registration);
     }
 
-    @GetMapping
+    @GetMapping("/list")
     public ResponseEntity<?> getAllRegistrations() {
         var allRegistrations = registrationService.allRegistration();
         return ResponseEntity.ok(allRegistrations);

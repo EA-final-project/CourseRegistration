@@ -15,15 +15,15 @@ public class RegistrationEventController {
     @Autowired
     private RegistrationEventService registrationEventService;
 
-    @GetMapping("/read/{id}")
-    public ResponseEntity<?> readRegistrationEvent(@PathVariable Long id, @RequestParam String groupName) {
-        var readEvent = registrationEventService.readRegistrationEvent(id, groupName);
-
-        if (readEvent == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(readEvent);
-    }
+//    @GetMapping("/read/{studentId}") //fixme -----> not working
+//    public ResponseEntity<?> readRegistrationEvent(@PathVariable String studentId) {
+//        var readEvent = registrationEventService.getRegistrationEventByStudentId(studentId);
+//
+//        if (readEvent == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return ResponseEntity.ok(readEvent);
+//    }
 
     @PostMapping
     public ResponseEntity<?> addRegistrationEvent(@RequestBody RegistrationEvent event) {
@@ -31,9 +31,9 @@ public class RegistrationEventController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getRegistrationEvent(@PathVariable Long id) {
-        var event = registrationEventService.getRegistrationEvent(id);
+    @GetMapping("/{studentId}") //fixme--->test
+    public ResponseEntity<?> getRegistrationEvent(@PathVariable String studentId, @RequestParam String track) {
+        var event = registrationEventService.readRegistrationEvent(studentId,track);
         if (event == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

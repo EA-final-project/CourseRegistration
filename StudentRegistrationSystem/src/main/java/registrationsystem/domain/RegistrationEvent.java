@@ -17,7 +17,7 @@ import java.util.Collection;
 @Table(name = "registrationevent")
 public class RegistrationEvent {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;

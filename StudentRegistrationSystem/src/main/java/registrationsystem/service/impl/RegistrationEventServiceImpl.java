@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RegistrationEventServiceImpl implements RegistrationEventService {
     @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
     private RegistrationEventRepository registrationEventRepository;
     @Autowired
     private RegistrationRequestRepository registrationRequestRepository;
@@ -34,6 +36,18 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     @Override
     public void addRegistrationEvent(RegistrationEvent registrationEvent) {
         registrationEventRepository.save(registrationEvent);
+    }
+
+    @Override
+    public Collection<RegistrationEventDTO> getRegistrationEventByStudentId(String studentId) {
+        var allRegistrations = registrationEventRepository.findRegistrationEventsById(studentId); //working
+
+        if (allRegistrations == null) {
+            throw new CourseExceptionHandler("No registrationEvent found for student with id " + studentId + " not found");
+        }
+        return allRegistrations.stream()
+                .map(event -> modelMapper.map(event, RegistrationEventDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -55,9 +69,8 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     public void submitRegistration(Collection<RegistrationRequest> requests, HashMap<Boolean, Course> selected) {
 
         if (recentRegistrationEvent() == RegistrationStatus.OPEN) {
-
             for (RegistrationRequest request : requests) {
-                registrationRequestRepository.save(request);
+                registrationRequestRepository.save(request); //fixme --> student id --??? load from db and get course and save request
             }
         }
     }
@@ -86,11 +99,13 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         var latestEvent = registrationEventRepository.findFirstByOrderByStartDateAsc();
 
         LocalDate currentTime = LocalDate.now(); // 18
+        LocalDate startDate = latestEvent.getStartDate();
+        LocalDate endDate = latestEvent.getEndDate();
 
-        if (currentTime.isAfter(latestEvent.getStartDate()) && currentTime.isBefore(latestEvent.getEndDate())) {
+        if (currentTime.isAfter(startDate) && currentTime.isBefore(endDate)) {
             log.info("Open registration");
             return RegistrationStatus.OPEN;
-        } else if (currentTime.isAfter(latestEvent.getStartDate()) && currentTime.isAfter(latestEvent.getEndDate())) {
+        } else if (currentTime.isAfter(startDate) && currentTime.isAfter(endDate)) {
             log.info("closed registration");
             return RegistrationStatus.CLOSED;
         } else {
@@ -108,13 +123,14 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         }
     }
 
+
     @Override
-    public Collection<CourseOfferingDTO> readRegistrationEvent(Long studentId, String groupName) {
-        var allEvent = registrationEventRepository.findById(studentId);
+    public Collection<CourseOfferingDTO> readRegistrationEvent(String studentId, String track) {
+        var allEvent = studentRepository.findStudentByStudentId(studentId);
 
         return allEvent.stream()
                 .flatMap(event -> event.getRegistrationGroups().stream())
-                //.filter(group -> group.getGroupName().equals(groupName))  //fixme ---------------------->
+                .filter(group -> group.getTrack().equals(track))
                 .flatMap(block -> block.getAcademicBlocks().stream())
                 .flatMap(stu -> stu.getCourseOfferings().stream())
                 .map(st -> modelMapper.map(st, CourseOfferingDTO.class))
