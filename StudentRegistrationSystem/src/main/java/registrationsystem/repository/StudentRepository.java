@@ -12,7 +12,9 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    @Query("select s from Student s where s.studentId=:studentId")
+    //@Query("select s from Student s where s.studentId=:studentId")
     Optional<Student> findStudentByStudentId(@Param("studentId") String studentId);
+
+    //Student findStudentByStudentId(String studentId);
 
 }

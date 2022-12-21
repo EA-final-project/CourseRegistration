@@ -8,6 +8,7 @@ import registrationsystem.repository.RegistrationEventRepository;
 import registrationsystem.repository.RegistrationRepository;
 import registrationsystem.repository.RegistrationRequestRepository;
 import registrationsystem.repository.StudentRepository;
+import registrationsystem.service.RegistrationService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,17 +16,19 @@ import java.util.stream.Collectors;
 @Component
 public class ConvertToRegistration {
     @Autowired
-    private RegistrationEventRepository registrationEventRepository;
+    private RegistrationService registrationService;
 
-    public Registration convertor(Collection<RegistrationRequest> requests, Collection<CourseOffering> courseOfferings) {
+    public Registration convertor(Collection<RegistrationRequest> requests, Collection<CourseOffering> courseOfferings) { //fixme ---> param
+
         Registration registration = new Registration();
+
         for (RegistrationRequest request : requests) {
             if (request.getCourseOffering().getAvailableSeats() > 0) {
-
                 //convert the RegistrationRequest to Registration
                 registration = new Registration(1L, request.getStudent().getStudentId(),
                         request.getCourseOffering().getCourse().getId(), Arrays.asList(request.getStudent()),
                         Arrays.asList(request.getCourseOffering()));
+                //registrationService.saveRegistration(registration);
                 return registration;
             }else {
                 return null;

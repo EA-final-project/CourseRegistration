@@ -54,21 +54,21 @@ public class UserController {
 //        return ResponseEntity.ok(result);
 //    }
 
-    @PatchMapping("/registration-events/{id}") //fixme -----> partially working
-    public ResponseEntity<?> processRequest(@PathVariable Long id, @RequestParam boolean processed) {
-        //userService.processRegistrationRequest(id, processed);
-        if (processed == true) {
-            var listRequests = registrationRequestRepository.findAll();
-
-            Collection<CourseOffering> listOffering = listRequests.stream()
-                    .map(req -> req.getCourseOffering())
-                    .collect(Collectors.toList());
-
-            Registration registration = convertToRegistration.convertor(listRequests, listOffering);
-            registrationRepository.save(registration);
-        }
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
+//    @PatchMapping("/registration-events/{id}") //fixme -----> partially working
+//    public ResponseEntity<?> processRequest(@PathVariable Long id, @RequestParam boolean processed) {
+//        //userService.processRegistrationRequest(id, processed);
+//        if (processed == true) {
+//            var listRequests = registrationRequestRepository.findAll();
+//
+//            Collection<CourseOffering> listOffering = listRequests.stream()
+//                    .map(req -> req.getCourseOffering())
+//                    .collect(Collectors.toList());
+//
+//            Registration registration = convertToRegistration.convertor(listRequests);
+//            registrationRepository.save(registration);
+//        }
+//        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+//    }
 
     /**
      * Student Controller start HERE

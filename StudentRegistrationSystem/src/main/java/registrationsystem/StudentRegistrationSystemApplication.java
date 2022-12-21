@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.RestTemplate;
 import registrationsystem.domain.*;
+import registrationsystem.kafkaSender.KafkaSenderService;
 import registrationsystem.repository.*;
 
 import java.time.LocalDate;
@@ -17,14 +18,16 @@ import java.util.Collection;
 public class StudentRegistrationSystemApplication implements CommandLineRunner {
     @Autowired
     private AddressRepository addressRepository;
-
     @Autowired
     private RegistrationGroupRepository registrationGroupRepository;
     @Autowired
     private RegistrationEventRepository registrationEventRepository;
     @Autowired
+    private KafkaSenderService kafkaSenderService;
+    @Autowired
     private RestTemplate restTemplate;
     private String baseUrl = "http://localhost:8080/submit";
+    private String requestUrl = "registration-requests/submit";
 
     public static void main(String[] args) {
         SpringApplication.run(StudentRegistrationSystemApplication.class, args);
@@ -45,7 +48,6 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
         Course course3 = new Course(3L, "CS477", "WAP", "Web Application Programming");
         Course course4 = new Course(4L, "CS425", "SE", "Software Engineering");
         Course course5 = new Course(5L, "CS422", "DBMS", "Database Managements System");
-
 
         Faculty faculty1 = new Faculty(1L, "Renee", "De Joe", "renee@miueedu", "Professor");
         Faculty faculty2 = new Faculty(2L, "Payman", "Salek", "peyman@miueedu", "Professor");
@@ -97,18 +99,25 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
         //creating registrationRequest
         Collection<RegistrationRequest> listRequest1 = new ArrayList<>();
         Collection<RegistrationRequest> listRequest2 = new ArrayList<>();
-        RegistrationRequest registrationRequest1 = new RegistrationRequest(1L, 1,null, courseOffering1);
-        RegistrationRequest registrationRequest2 = new RegistrationRequest(2L, 1, null,courseOffering2);
-        RegistrationRequest registrationRequest3 = new RegistrationRequest(3L, 1, null,courseOffering3);
-        RegistrationRequest registrationRequest4 = new RegistrationRequest(4L, 1, null,courseOffering4);
-        RegistrationRequest registrationRequest5 = new RegistrationRequest(5L, 1, null,courseOffering5);
+        RegistrationRequest registrationRequest1 = new RegistrationRequest(1L, 1, null, courseOffering1);
+        RegistrationRequest registrationRequest2 = new RegistrationRequest(2L, 1, null, courseOffering2);
+        RegistrationRequest registrationRequest3 = new RegistrationRequest(3L, 1, null, courseOffering3);
+        RegistrationRequest registrationRequest4 = new RegistrationRequest(4L, 1, null, courseOffering4);
+        RegistrationRequest registrationRequest5 = new RegistrationRequest(5L, 1, null, courseOffering5);
+
+        Collection<RegistrationRequest> listRequest3 = new ArrayList<>();
+        //reguest post
+        RegistrationRequest registrationRequest6 = new RegistrationRequest(6L, 1, null, courseOffering4);
+        RegistrationRequest registrationRequest7 = new RegistrationRequest(6L, 1, null, courseOffering5);
+        //post
+        listRequest3.add(registrationRequest6);
+        listRequest3.add(registrationRequest7);
 
         listRequest1.add(registrationRequest1);
         listRequest1.add(registrationRequest2);
         listRequest1.add(registrationRequest3);
         listRequest1.add(registrationRequest4);
         listRequest1.add(registrationRequest5);
-
 
         listRequest2.add(registrationRequest4);
         listRequest2.add(registrationRequest5);
@@ -122,7 +131,6 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
 
         registrationGroups.add(fppGroup);
         registrationGroups.add(mppGroup);
-
 
         //creating student
         Collection<Student> fppStudents = new ArrayList<>();
@@ -159,7 +167,7 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
         RegistrationEvent aprilEntry = new RegistrationEvent(2L, LocalDate.of(2023, 04, 10), LocalDate.of(2023, 04, 20), registrationGroups);
         RegistrationEvent augustEntry = new RegistrationEvent(3L, LocalDate.of(2023, 8, 10), LocalDate.of(2023, 8, 20), registrationGroups);
         RegistrationEvent novemberEntry = new RegistrationEvent(4L, LocalDate.of(2023, 11, 10), LocalDate.of(2023, 11, 20), registrationGroups);
-        RegistrationEvent testingEvent = new RegistrationEvent(5L, LocalDate.of(2022, 12, 10), LocalDate.of(2022, 12, 30), registrationGroups);
+        RegistrationEvent testingEvent = new RegistrationEvent(5L, LocalDate.of(2022, 12, 10), LocalDate.of(2022, 12, 12), registrationGroups);
 
         registrationEventRepository.save(februaryEntry);
         registrationEventRepository.save(aprilEntry);
@@ -167,6 +175,16 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
         registrationEventRepository.save(novemberEntry);
         registrationEventRepository.save(testingEvent);
 
+        StudentDetails details = new StudentDetails("111",
+                "Robeil",
+                "Aregawi",
+                "silukeen1@gmail.com",
+                11L,
+                "2022, 02, 02",
+                "2022, 04, 04");
+        kafkaSenderService.sendStudentDetails("student_details1",details);
+
         //restTemplate.postForLocation(baseUrl+"/{studentId}",registrationRequest1,111);
+        //restTemplate.postForLocation(requestUrl+"/{studentId}",listRequest3,111);
     }
 }

@@ -6,17 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.*;
 import registrationsystem.exception.CourseExceptionHandler;
+import registrationsystem.kafkaSender.KafkaSenderService;
 import registrationsystem.repository.RegistrationEventRepository;
 import registrationsystem.repository.RegistrationRequestRepository;
 import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.RegistrationEventService;
 import registrationsystem.service.RegistrationRequestService;
-import registrationsystem.service.dto.RegistrationEventDTO;
 import registrationsystem.service.dto.RegistrationRequestDTO;
+
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,18 +24,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RegistrationRequestServiceImpl implements RegistrationRequestService {
     @Autowired
-    private RegistrationEventRepository registrationEventRepository;
-    @Autowired
     private RegistrationRequestRepository registrationRequestRepository;
     @Autowired
-    private StudentRepository studentRepository;
-
+    private RegistrationEventRepository registrationEventRepository;
     @Autowired
     private RegistrationRequestRepository repository;
+    @Autowired
+    private StudentRepository studentRepository;
     @Autowired
     private RegistrationEventService service;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private KafkaSenderService kafkaSenderService;
 
     @Override
     public void deleteRegistrationRequest(Long id) {
@@ -54,8 +55,8 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
     @Override
     public String saveRegistrationRequest(Collection<RegistrationRequest> requests, String studentId) { //not fully working
 
-        Set<Long> offerId = new HashSet<>();
         Student student = studentRepository.findStudentByStudentId(studentId).get();
+        Set<Long> offerId = new HashSet<>(); //to avoid duplication
 
         RegistrationEvent latest = registrationEventRepository.findFirstByOrderByStartDateAsc();
         RegistrationStatus recentStatus = service.recentRegistrationEvent();
@@ -63,10 +64,15 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
         if (recentStatus.equals(RegistrationStatus.OPEN)) {
             Collection<RegistrationGroup> groups = latest.getRegistrationGroups();
 
-            groups.stream()
-                    .flatMap(group -> group.getAcademicBlocks().stream())
-                    .flatMap(block -> block.getCourseOfferings().stream())
-                    .map(course -> offerId.add(course.getId()));
+            for(RegistrationGroup group: groups){
+                Collection<AcademicBlock> blocks = group.getAcademicBlocks();
+                for(AcademicBlock block: blocks){
+                    Collection<CourseOffering> offers = block.getCourseOfferings();
+                    for(CourseOffering offer: offers){
+                        offerId.add(offer.getId());
+                    }
+                }
+            }
 
             for (RegistrationRequest request : requests) {
                 if (offerId.contains(request.getCourseOffering().getId())) {
@@ -76,6 +82,19 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
                     log.info("Student with id: " + studentId + " and request Id: " + "saved");
                 }
             }
+            StudentDetails studentDetails = new StudentDetails(
+                    student.getStudentId(),
+                    student.getFirstName(),
+                    student.getLastName(),
+                    student.getEmail(),
+                    latest.getId(),
+                    latest.getStartDate().toString(),
+                    latest.getEndDate().toString()
+            );
+            /**
+             * sending studentDetails to Kafka
+             */
+            kafkaSenderService.sendStudentDetails("student_details1",studentDetails);
             return "Request saved successfully";
         } else {
             return "not saved";

@@ -29,8 +29,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
-    private ConvertToRegistration convertToRegistration;
-    @Autowired
     private ModelMapper modelMapper;
 
     @Override

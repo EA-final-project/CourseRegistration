@@ -9,21 +9,26 @@ import registrationsystem.service.RegistrationEventService;
 
 
 @RestController
-@RequestMapping("/registrations")
+@RequestMapping("/registration-events")
 public class RegistrationEventController {
 
     @Autowired
     private RegistrationEventService registrationEventService;
 
-//    @GetMapping("/read/{studentId}") //fixme -----> not working
-//    public ResponseEntity<?> readRegistrationEvent(@PathVariable String studentId) {
-//        var readEvent = registrationEventService.getRegistrationEventByStudentId(studentId);
-//
-//        if (readEvent == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return ResponseEntity.ok(readEvent);
-//    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> processRegistrationEvent(@PathVariable Long id, @RequestParam boolean processed) {
+        registrationEventService.processRegistrationEvent(id,processed);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/read/{studentId}") //fixme -----> not working
+    public ResponseEntity<?> readRegistrationEvent(@PathVariable String studentId) {
+        var readEvent = registrationEventService.getRegistrationEventByStudentId(studentId);
+
+        if (readEvent == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(readEvent);
+    }
 
     @PostMapping
     public ResponseEntity<?> addRegistrationEvent(@RequestBody RegistrationEvent event) {
@@ -34,6 +39,7 @@ public class RegistrationEventController {
     @GetMapping("/{studentId}") //fixme--->test
     public ResponseEntity<?> getRegistrationEvent(@PathVariable String studentId, @RequestParam String track) {
         var event = registrationEventService.readRegistrationEvent(studentId,track);
+
         if (event == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

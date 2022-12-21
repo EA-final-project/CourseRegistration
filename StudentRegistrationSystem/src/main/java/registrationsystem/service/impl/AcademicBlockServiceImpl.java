@@ -5,8 +5,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.AcademicBlock;
+import registrationsystem.domain.CourseOffering;
 import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.repository.AcademicBlockRepository;
+import registrationsystem.repository.CourseOfferingRepository;
 import registrationsystem.service.AcademicBlockService;
 import registrationsystem.service.dto.AcademicBlockDTO;
 
@@ -17,22 +19,24 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AcademicBlockServiceImpl implements AcademicBlockService {
     @Autowired
+    private CourseOfferingRepository courseOfferingRepository;
+    @Autowired
     private AcademicBlockRepository repository;
     @Autowired
     private ModelMapper modelMapper;
 
     @Override
-    public void addBlock(AcademicBlock block) {
-        log.info("Saving Block with Id :" + block.toString());
-        repository.save(block);
+    public void addBlock(CourseOffering courseOffering) {
+        log.info("Saving Block with Id :" + courseOffering.toString());
+        courseOfferingRepository.save(courseOffering);
     }
 
     @Override
     public AcademicBlockDTO getBlock(Long id) {
         var block = repository.findById(id).get();
-        if(block == null){
+        if (block == null) {
             log.info("Block with Id :" + id + " not found");
-            throw new CourseExceptionHandler("Block with Id :" + id+ " not found");
+            throw new CourseExceptionHandler("Block with Id :" + id + " not found");
         }
         return modelMapper.map(block, AcademicBlockDTO.class);
     }
@@ -58,7 +62,7 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
             updateBlock.setStartDate(block.getStartDate());
             updateBlock.setEndDate(block.getEndDate());
             updateBlock.setCourseOfferings(block.getCourseOfferings());
-            log.info("updating Block with Id :" + id );
+            log.info("updating Block with Id :" + id);
             repository.save(updateBlock);
         } else {
             throw new CourseExceptionHandler("Block with Id :" + id + " not found");
@@ -69,9 +73,9 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
     @Override
     public void deleteBlock(Long id) {
         var toDelete = repository.findById(id);
-        if(toDelete == null){
+        if (toDelete == null) {
             log.info("Deleting Block with Id :");
-            throw new CourseExceptionHandler("Block with Id :" + id +" not found");
+            throw new CourseExceptionHandler("Block with Id :" + id + " not found");
         }
         repository.deleteById(id);
     }

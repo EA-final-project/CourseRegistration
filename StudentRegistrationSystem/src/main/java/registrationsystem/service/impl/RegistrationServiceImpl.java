@@ -21,6 +21,12 @@ public class RegistrationServiceImpl implements RegistrationService {
     private RegistrationRepository registrationRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Override
+    public void saveRegistration(Registration registration) {
+        registrationRepository.save(registration);
+    }
+
     @Override
     public void deleteRegistration(Long id) {
         var registration = registrationRepository.findById(id);

@@ -6,38 +6,84 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import registrationsystem.domain.*;
 import registrationsystem.exception.CourseExceptionHandler;
+import registrationsystem.kafkaSender.KafkaSenderService;
 import registrationsystem.repository.RegistrationEventRepository;
-import registrationsystem.repository.RegistrationRequestRepository;
 import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.RegistrationEventService;
+import registrationsystem.service.RegistrationService;
 import registrationsystem.service.dto.CourseOfferingDTO;
 import registrationsystem.service.dto.RegistrationEventDTO;
-import registrationsystem.service.dto.StudentDTO;
-import registrationsystem.service.dto.StudentDetailDTO;
+import registrationsystem.util.ConvertToRegistration;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class RegistrationEventServiceImpl implements RegistrationEventService {
-    @Autowired
-    private StudentRepository studentRepository;
+
     @Autowired
     private RegistrationEventRepository registrationEventRepository;
     @Autowired
-    private RegistrationRequestRepository registrationRequestRepository;
-
+    private ConvertToRegistration convertToRegistration;
+    @Autowired
+    private RegistrationService registrationService;
+    @Autowired
+    private StudentRepository studentRepository;
     @Autowired
     private ModelMapper modelMapper;
+
+
 
     @Override
     public void addRegistrationEvent(RegistrationEvent registrationEvent) {
         registrationEventRepository.save(registrationEvent);
     }
+    @Override
+    public void processRegistrationEvent(Long eventId,boolean processed) {
 
+        var eventToProcess = registrationEventRepository.findById(eventId).get();
+        if (eventToProcess == null) {
+            throw new CourseExceptionHandler("The Registration Event with id " + eventId + " not found");
+        }
+        //convertor
+        Collection<RegistrationRequest> allRequests = new ArrayList<>();
+        Collection<CourseOffering> allCourseOfferings = new ArrayList<>();
+        Collection<RegistrationGroup> allGroups = new ArrayList<>();
+        RegistrationStatus  recentEvent = recentRegistrationEvent();
+
+        //the event must be closed
+        if (recentEvent == RegistrationStatus.CLOSED) {
+
+            //getting all the offering
+            for(RegistrationGroup groups: eventToProcess.getRegistrationGroups()){
+                allGroups.add(groups);
+                for(AcademicBlock blocks: groups.getAcademicBlocks()){
+                    for(CourseOffering offering: blocks.getCourseOfferings()){
+                        allCourseOfferings.add(offering);
+                    }
+                }
+            }
+            //getting all the requests
+            for(RegistrationGroup group: allGroups){
+                for(Student student: group.getStudents()){
+                    for(RegistrationRequest request: student.getRegistrationRequests()){
+                        allRequests.add(request);
+                    }
+                }
+            }
+            Registration convertedRequest = convertToRegistration.convertor(allRequests,allCourseOfferings);
+            registrationService.saveRegistration(convertedRequest);
+
+            /**
+             * send to kafka ----> ????
+             */
+        } else {
+            throw new CourseExceptionHandler("The Registration Event is currently open or it is in-progress");
+        }
+    }
     @Override
     public Collection<RegistrationEventDTO> getRegistrationEventByStudentId(String studentId) {
         var allRegistrations = registrationEventRepository.findRegistrationEventsById(studentId); //working
@@ -45,6 +91,14 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         if (allRegistrations == null) {
             throw new CourseExceptionHandler("No registrationEvent found for student with id " + studentId + " not found");
         }
+        //var student = studentRepository.findStudentByStudentId(studentId);
+//        return student.stream()
+//                .flatMap(gr -> gr.getRegistrationGroups().stream())
+//                .flatMap(block -> block.getAcademicBlocks().stream())
+//                .flatMap(c -> c.getCourseOfferings().stream())
+//                .map(offer -> modelMapper.map(offer, CourseOfferingDTO.class))
+//                .collect(Collectors.toList());
+
         return allRegistrations.stream()
                 .map(event -> modelMapper.map(event, RegistrationEventDTO.class))
                 .collect(Collectors.toList());
@@ -63,16 +117,6 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
             throw new CourseExceptionHandler("Registration with id " + id + " not found");
         }
         return modelMapper.map(event, RegistrationEventDTO.class);
-    }
-
-    @Override
-    public void submitRegistration(Collection<RegistrationRequest> requests, HashMap<Boolean, Course> selected) {
-
-        if (recentRegistrationEvent() == RegistrationStatus.OPEN) {
-            for (RegistrationRequest request : requests) {
-                registrationRequestRepository.save(request); //fixme --> student id --??? load from db and get course and save request
-            }
-        }
     }
 
     @Override

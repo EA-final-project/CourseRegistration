@@ -9,7 +9,7 @@ import registrationsystem.service.RegistrationService;
 
 @RestController
 @RequestMapping("/registrations")
-public class RegistrationServiceController {
+public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
 

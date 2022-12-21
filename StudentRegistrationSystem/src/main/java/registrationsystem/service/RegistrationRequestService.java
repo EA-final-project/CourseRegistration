@@ -10,7 +10,7 @@ public interface RegistrationRequestService {
     void deleteRegistrationRequest(Long id);
     RegistrationRequestDTO getRegistrationRequest(Long id);
     Collection<RegistrationRequestDTO> getAllRegistrationRequest();
-    String saveRegistrationRequest(Collection<RegistrationRequest> requests, String studentId);
     RegistrationRequestDTO updateRequest(Long id, RegistrationRequest request);
+    String saveRegistrationRequest(Collection<RegistrationRequest> requests, String studentId);
 
 }

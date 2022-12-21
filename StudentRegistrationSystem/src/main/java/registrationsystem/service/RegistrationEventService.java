@@ -14,9 +14,11 @@ public interface RegistrationEventService {
     RegistrationEventDTO getRegistrationEvent(Long id);
     Collection<RegistrationEventDTO> getAllRegistrationEvent();
     void addRegistrationEvent(RegistrationEvent registrationEvent);
+    void processRegistrationEvent(Long eventId,boolean processed);
     Collection<RegistrationEventDTO> getRegistrationEventByStudentId(String studentId);
     Collection<CourseOfferingDTO> readRegistrationEvent(String studentId, String track);
     RegistrationEventDTO updateRegistryEvent(Long id, RegistrationEvent registrationEvent);
-    void submitRegistration(Collection<RegistrationRequest> requests, HashMap<Boolean,Course> selected);
+
+
 
 }
