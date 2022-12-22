@@ -19,11 +19,11 @@ public class RegistrationRequest {
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private int priorityNumber;
-//    @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    //@JsonBackReference
+    @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="registrationrequest_student")
     private Student student;
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "registrationrequest_courseoffering")
     private CourseOffering courseOffering;
 

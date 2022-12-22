@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+
 @Getter
 @Setter
 @Entity
@@ -29,7 +29,7 @@ public class AcademicBlock {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     @JsonManagedReference
-    @OneToMany(mappedBy = "academicBlock",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Collection<CourseOffering> courseOfferings = new ArrayList<>();
+    @OneToMany(mappedBy = "academicBlocks",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Collection<CourseOffering> courseOfferings;
 
 }

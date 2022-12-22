@@ -8,6 +8,7 @@ import registrationsystem.domain.*;
 import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.kafkaSender.KafkaSenderService;
 import registrationsystem.repository.RegistrationEventRepository;
+import registrationsystem.repository.RegistrationRepository;
 import registrationsystem.repository.RegistrationRequestRepository;
 import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.RegistrationEventService;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class RegistrationRequestServiceImpl implements RegistrationRequestService {
+    @Autowired
+    private RegistrationRepository registrationRepository;
     @Autowired
     private RegistrationRequestRepository registrationRequestRepository;
     @Autowired
@@ -58,48 +61,34 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
         Student student = studentRepository.findStudentByStudentId(studentId).get();
         Set<Long> offerId = new HashSet<>(); //to avoid duplication
 
-        RegistrationEvent latest = registrationEventRepository.findFirstByOrderByStartDateAsc();
+        RegistrationEvent latestEvent = registrationEventRepository.findFirstByOrderByStartDateDesc();
         RegistrationStatus recentStatus = service.recentRegistrationEvent();
 
         if (recentStatus.equals(RegistrationStatus.OPEN)) {
-            Collection<RegistrationGroup> groups = latest.getRegistrationGroups();
-
-            for(RegistrationGroup group: groups){
-                Collection<AcademicBlock> blocks = group.getAcademicBlocks();
-                for(AcademicBlock block: blocks){
-                    Collection<CourseOffering> offers = block.getCourseOfferings();
-                    for(CourseOffering offer: offers){
-                        offerId.add(offer.getId());
-                    }
-                }
-            }
+            latestEvent.getRegistrationGroups().stream()
+                    .flatMap(gr -> gr.getAcademicBlocks().stream())
+                    .flatMap(bl -> bl.getCourseOfferings().stream())
+                    .forEach(offer -> offerId.add(offer.getId()));
 
             for (RegistrationRequest request : requests) {
                 if (offerId.contains(request.getCourseOffering().getId())) {
-                    student.getRegistrationRequests().add(request);
+                    request.setStudent(student);
                     studentRepository.save(student);
                     registrationRequestRepository.save(request);
                     log.info("Student with id: " + studentId + " and request Id: " + "saved");
                 }
+
+                StudentDetails studentDetails = new StudentDetails(
+                        student.getStudentId(), student.getFirstName(),
+                        student.getLastName(), student.getEmail(),
+                        latestEvent.getId(), latestEvent.getStartDate().toString(),
+                        latestEvent.getEndDate().toString()
+                );
+                kafkaSenderService.sendStudentDetails("student_details1",studentDetails);
             }
-            StudentDetails studentDetails = new StudentDetails(
-                    student.getStudentId(),
-                    student.getFirstName(),
-                    student.getLastName(),
-                    student.getEmail(),
-                    latest.getId(),
-                    latest.getStartDate().toString(),
-                    latest.getEndDate().toString()
-            );
-            /**
-             * sending studentDetails to Kafka
-             */
-            kafkaSenderService.sendStudentDetails("student_details1",studentDetails);
-            return "Request saved successfully";
-        } else {
-            return "not saved";
         }
-    }
+        return "Saved Request";
+}
 
     @Override
     public Collection<RegistrationRequestDTO> getAllRegistrationRequest() {

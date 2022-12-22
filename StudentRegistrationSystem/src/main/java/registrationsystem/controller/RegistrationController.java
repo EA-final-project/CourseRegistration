@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import registrationsystem.domain.Registration;
 import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.service.RegistrationService;
 
@@ -13,12 +14,7 @@ public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
 
-    /**
-     * not fully working it should return teh processed registration but now return registrationevents ??????
-     * @param id
-     * @return
-     */
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getRegistration(@PathVariable Long id) {
         var registration = registrationService.getRegistration(id);
         if (registration == null) {
@@ -27,7 +23,7 @@ public class RegistrationController {
         return ResponseEntity.ok(registration);
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<?> getAllRegistrations() {
         var allRegistrations = registrationService.allRegistration();
         return ResponseEntity.ok(allRegistrations);

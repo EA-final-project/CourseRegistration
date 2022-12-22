@@ -10,7 +10,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+
 @Getter
 @Setter
 @Entity
@@ -22,10 +22,9 @@ public class RegistrationGroup {
     private String track;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "registrationgroup_academicblocks")
-    private Collection<AcademicBlock> academicBlocks = new ArrayList<>();
+    private Collection<AcademicBlock> academicBlocks;
     @JsonBackReference
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "registrationgroup_students")
     private Collection<Student> students;
 
 }

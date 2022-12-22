@@ -21,19 +21,26 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
     @Autowired
     private CourseOfferingRepository courseOfferingRepository;
     @Autowired
-    private AcademicBlockRepository repository;
+    private AcademicBlockRepository academicBlockRepository;
     @Autowired
     private ModelMapper modelMapper;
 
     @Override
-    public void addBlock(CourseOffering courseOffering) {
-        log.info("Saving Block with Id :" + courseOffering.toString());
-        courseOfferingRepository.save(courseOffering);
+    public void addBlock(AcademicBlock block) {
+        log.info("Saving Block with Id :" + block.toString());
+        academicBlockRepository.save(block);
     }
 
     @Override
+    public void addCourseOfferingToBlock(Long blockId, CourseOffering courseOffering) {
+        log.info("Saving courseOffering with Id :" + courseOffering.toString());
+        var block = academicBlockRepository.findById(blockId).get();
+        block.getCourseOfferings().add(courseOffering);
+        academicBlockRepository.save(block);
+    }
+    @Override
     public AcademicBlockDTO getBlock(Long id) {
-        var block = repository.findById(id).get();
+        var block = academicBlockRepository.findById(id).get();
         if (block == null) {
             log.info("Block with Id :" + id + " not found");
             throw new CourseExceptionHandler("Block with Id :" + id + " not found");
@@ -43,7 +50,7 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
 
     @Override
     public Collection<AcademicBlockDTO> getAllBlocks() {
-        var allBlocks = repository.findAll();
+        var allBlocks = academicBlockRepository.findAll();
         log.info("fetching all blocks :");
         return allBlocks.stream()
                 .map(block -> modelMapper.map(block, AcademicBlockDTO.class))
@@ -52,7 +59,7 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
 
     @Override
     public AcademicBlockDTO updateBlock(Long id, AcademicBlock block) {
-        var updateBlock = repository.findById(id).get();
+        var updateBlock = academicBlockRepository.findById(id).get();
 
         if (updateBlock != null) {
             updateBlock.setId(block.getId());
@@ -63,7 +70,7 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
             updateBlock.setEndDate(block.getEndDate());
             updateBlock.setCourseOfferings(block.getCourseOfferings());
             log.info("updating Block with Id :" + id);
-            repository.save(updateBlock);
+            academicBlockRepository.save(updateBlock);
         } else {
             throw new CourseExceptionHandler("Block with Id :" + id + " not found");
         }
@@ -72,11 +79,11 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
 
     @Override
     public void deleteBlock(Long id) {
-        var toDelete = repository.findById(id);
+        var toDelete = academicBlockRepository.findById(id);
         if (toDelete == null) {
-            log.info("Deleting Block with Id :");
+            log.info("Deleting Block with Id :" + id);
             throw new CourseExceptionHandler("Block with Id :" + id + " not found");
         }
-        repository.deleteById(id);
+        academicBlockRepository.deleteById(id);
     }
 }

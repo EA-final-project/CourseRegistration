@@ -10,10 +10,10 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-@Transactional
+//@Transactional
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    //@Query("select s from Student s where s.studentId=:studentId")
-    Optional<Student> findStudentByStudentId(@Param("studentId") String studentId);
+//    @Query("select s from Student s where s.studentId=:studentId")
+    Optional<Student> findStudentByStudentId( String studentId);
 
     //Student findStudentByStudentId(String studentId);
 

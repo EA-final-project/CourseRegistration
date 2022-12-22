@@ -21,6 +21,7 @@ public class FacultyServiceImpl implements FacultyService {
     private FacultyRepository facultyRepository;
     @Autowired
     private ModelMapper modelMapper;
+
     @Override
     public void addFaculty(Faculty faculty) {
         facultyRepository.save(faculty);

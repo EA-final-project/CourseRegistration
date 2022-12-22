@@ -57,16 +57,22 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
 
         //creating courseOffering
         Collection<CourseOffering> listOffering = new ArrayList<>();
+
         CourseOffering courseOffering1 = new CourseOffering(1L, "CS590", 30, 30, faculty1, course1, null); //fixme ----> calculate seats
         courseOffering1.setInitial(courseOffering1.getFaculty().getFistName().charAt(0) + "." + courseOffering1.getFaculty().getLastName().charAt(0));
+
         CourseOffering courseOffering2 = new CourseOffering(2L, "CS544", 30, 30, faculty2, course2, null);
         courseOffering2.setInitial(courseOffering2.getFaculty().getFistName().charAt(0) + "." + courseOffering2.getFaculty().getLastName().charAt(0));
+
         CourseOffering courseOffering3 = new CourseOffering(3L, "CS477", 30, 30, faculty3, course3, null);
         courseOffering3.setInitial(courseOffering3.getFaculty().getFistName().charAt(0) + "." + courseOffering3.getFaculty().getLastName().charAt(0));
+
         CourseOffering courseOffering4 = new CourseOffering(4L, "CS425", 30, 30, faculty4, course4, null);
         courseOffering4.setInitial(courseOffering4.getFaculty().getFistName().charAt(0) + "." + courseOffering4.getFaculty().getLastName().charAt(0));
+
         CourseOffering courseOffering5 = new CourseOffering(5L, "CS422", 30, 30, faculty5, course5, null);
         courseOffering5.setInitial(courseOffering5.getFaculty().getFistName().charAt(0) + "." + courseOffering5.getFaculty().getLastName().charAt(0));
+
         listOffering.add(courseOffering1);
         listOffering.add(courseOffering2);
         listOffering.add(courseOffering3);
@@ -84,63 +90,67 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
         AcademicBlock academicBlock5 = new AcademicBlock(5L, "CS422", "March", "Spring", LocalDate.of(2023, 03, 06), LocalDate.of(2023, 04, 06), listOffering);
 
         //setting the academic block
-        courseOffering1.setAcademicBlock(academicBlock1);
-        courseOffering2.setAcademicBlock(academicBlock2);
-        courseOffering3.setAcademicBlock(academicBlock3);
-        courseOffering4.setAcademicBlock(academicBlock4);
-        courseOffering5.setAcademicBlock(academicBlock5);
+        courseOffering1.setAcademicBlocks(academicBlock1);
+        courseOffering2.setAcademicBlocks(academicBlock2);
+        courseOffering3.setAcademicBlocks(academicBlock3);
+        courseOffering4.setAcademicBlocks(academicBlock4);
+        courseOffering5.setAcademicBlocks(academicBlock5);
 
         fppBlocks.add(academicBlock1);
         fppBlocks.add(academicBlock2);
         fppBlocks.add(academicBlock3);
+
         mppBlocks.add(academicBlock4);
         mppBlocks.add(academicBlock5);
 
         //creating registrationRequest
         Collection<RegistrationRequest> listRequest1 = new ArrayList<>();
         Collection<RegistrationRequest> listRequest2 = new ArrayList<>();
+        Collection<RegistrationRequest> listRequest3 = new ArrayList<>();
+//        Collection<RegistrationRequest> listRequest4 = new ArrayList<>();
+//        Collection<RegistrationRequest> listRequest5 = new ArrayList<>();
+
         RegistrationRequest registrationRequest1 = new RegistrationRequest(1L, 1, null, courseOffering1);
         RegistrationRequest registrationRequest2 = new RegistrationRequest(2L, 1, null, courseOffering2);
         RegistrationRequest registrationRequest3 = new RegistrationRequest(3L, 1, null, courseOffering3);
         RegistrationRequest registrationRequest4 = new RegistrationRequest(4L, 1, null, courseOffering4);
         RegistrationRequest registrationRequest5 = new RegistrationRequest(5L, 1, null, courseOffering5);
+        RegistrationRequest registrationRequest6 = new RegistrationRequest(6L, 1, null, courseOffering5);
 
-        Collection<RegistrationRequest> listRequest3 = new ArrayList<>();
-        //reguest post
-        RegistrationRequest registrationRequest6 = new RegistrationRequest(6L, 1, null, courseOffering4);
-        RegistrationRequest registrationRequest7 = new RegistrationRequest(6L, 1, null, courseOffering5);
         //post
-        listRequest3.add(registrationRequest6);
-        listRequest3.add(registrationRequest7);
-
         listRequest1.add(registrationRequest1);
-        listRequest1.add(registrationRequest2);
-        listRequest1.add(registrationRequest3);
-        listRequest1.add(registrationRequest4);
-        listRequest1.add(registrationRequest5);
+        listRequest2.add(registrationRequest2);
 
-        listRequest2.add(registrationRequest4);
-        listRequest2.add(registrationRequest5);
+        listRequest3.add(registrationRequest3);
+        //listRequest4.add(registrationRequest3);
+
+//        listRequest1.add(registrationRequest4);
+//        listRequest2.add(registrationRequest4);
+//
+//        listRequest1.add(registrationRequest5);
+//        listRequest2.add(registrationRequest5);
+//
+//        listRequest3.add(registrationRequest6);
 
         //creating RegistrationGroup
         Collection<RegistrationGroup> registrationGroups = new ArrayList<>();
 
-        //creating FPP
-        RegistrationGroup mppGroup = new RegistrationGroup(1L, "MPP", mppBlocks, null);
-        RegistrationGroup fppGroup = new RegistrationGroup(2L, "FPP", fppBlocks, null);
+//        //creating FPP
+//        RegistrationGroup mppGroup = new RegistrationGroup(1L, "MPP", mppBlocks, null);
+//        RegistrationGroup fppGroup = new RegistrationGroup(2L, "FPP", fppBlocks, null);
 
-        registrationGroups.add(fppGroup);
-        registrationGroups.add(mppGroup);
+//        registrationGroups.add(fppGroup);
+//        registrationGroups.add(mppGroup);
 
         //creating student
         Collection<Student> fppStudents = new ArrayList<>();
         Collection<Student> mppStudents = new ArrayList<>();
 
-        Student student1 = new Student(1L, "111", "Robeil", "Aregawi", "robeilaregawi@miu.edu", mailingAddress, homeAddress, listRequest1, registrationGroups);
-        Student student2 = new Student(2L, "222", "Serapie", "Tuyishimire", "stuyishimire@miu.edu", mailingAddress, homeAddress, listRequest1, registrationGroups);
-        Student student3 = new Student(3L, "333", "Regaul", "Karim", "regualcse@gmail.ocm", mailingAddress, homeAddress, listRequest1, registrationGroups);
-        Student student4 = new Student(4L, "444", "Robel", "Issak", "robl@miu.edu", mailingAddress, homeAddress, listRequest1, registrationGroups);
-        Student student5 = new Student(5L, "555", "Misghina", "Niguse", "misghna@gmail.ocm", mailingAddress, homeAddress, listRequest1, registrationGroups);
+        Student student1 = new Student(1L, "111", "Robeil", "Aregawi", "robeilaregawi@miu.edu", mailingAddress, homeAddress, listRequest1, registrationGroups); // one group
+        Student student2 = new Student(2L, "222", "Serapie", "Tuyishimire", "stuyishimire@miu.edu", mailingAddress, homeAddress, listRequest2, registrationGroups);
+        Student student3 = new Student(3L, "333", "Regaul", "Karim", "regualcse@gmail.ocm", mailingAddress, homeAddress, listRequest3, registrationGroups);
+        Student student4 = new Student(4L, "444", "Robel", "Issak", "robl@miu.edu", mailingAddress, homeAddress, listRequest3, registrationGroups);
+        Student student5 = new Student(5L, "555", "Misghina", "Niguse", "misghna@gmail.ocm", mailingAddress, homeAddress, listRequest2, registrationGroups);
 
         registrationRequest1.setStudent(student1);
         registrationRequest2.setStudent(student2);
@@ -156,24 +166,43 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
         mppStudents.add(student4);
         mppStudents.add(student5);
 
+       // creating FPP
+        RegistrationGroup mppGroup = new RegistrationGroup(1L, "MPP", mppBlocks, mppStudents);
+        RegistrationGroup fppGroup = new RegistrationGroup(2L, "FPP", fppBlocks, fppStudents);
+
+        registrationGroups.add(fppGroup);
+        registrationGroups.add(mppGroup);
         //setting registrationGroup
         fppGroup.setStudents(fppStudents);
         mppGroup.setStudents(mppStudents);
 
-        registrationGroupRepository.save(fppGroup);
-        registrationGroupRepository.save(mppGroup);
 
-        RegistrationEvent februaryEntry = new RegistrationEvent(1L, LocalDate.of(2023, 02, 10), LocalDate.of(2023, 02, 20), registrationGroups);
-        RegistrationEvent aprilEntry = new RegistrationEvent(2L, LocalDate.of(2023, 04, 10), LocalDate.of(2023, 04, 20), registrationGroups);
-        RegistrationEvent augustEntry = new RegistrationEvent(3L, LocalDate.of(2023, 8, 10), LocalDate.of(2023, 8, 20), registrationGroups);
-        RegistrationEvent novemberEntry = new RegistrationEvent(4L, LocalDate.of(2023, 11, 10), LocalDate.of(2023, 11, 20), registrationGroups);
-        RegistrationEvent testingEvent = new RegistrationEvent(5L, LocalDate.of(2022, 12, 10), LocalDate.of(2022, 12, 12), registrationGroups);
+
+
+        RegistrationEvent februaryEntry = new RegistrationEvent(1L, LocalDate.of(2022, 02, 10), LocalDate.of(2022, 02, 20), registrationGroups);
+        RegistrationEvent aprilEntry = new RegistrationEvent(2L, LocalDate.of(2022, 04, 10), LocalDate.of(2022, 04, 20), registrationGroups);
+        RegistrationEvent augustEntry = new RegistrationEvent(3L, LocalDate.of(2022, 8, 10), LocalDate.of(2022, 8, 20), registrationGroups);
+        RegistrationEvent novemberEntry = new RegistrationEvent(3L, LocalDate.of(2022, 12, 15), LocalDate.of(2022, 12, 20), registrationGroups);
+
+        RegistrationEvent closedEvent = new RegistrationEvent(5L, LocalDate.of(2022, 12, 10), LocalDate.of(2022, 12, 20), registrationGroups);
+        RegistrationEvent closed = new RegistrationEvent(4L, LocalDate.of(2022, 12, 12), LocalDate.of(2022, 12, 17), registrationGroups);
+        RegistrationEvent closed1 = new RegistrationEvent(9L, LocalDate.of(2022, 12, 13), LocalDate.of(2022, 12, 18), registrationGroups);
+
+        novemberEntry.setRegistrationGroups(registrationGroups);
 
         registrationEventRepository.save(februaryEntry);
         registrationEventRepository.save(aprilEntry);
         registrationEventRepository.save(augustEntry);
+
+        registrationGroupRepository.save(fppGroup);
+        registrationGroupRepository.save(mppGroup);
+
         registrationEventRepository.save(novemberEntry);
-        registrationEventRepository.save(testingEvent);
+
+        registrationEventRepository.save(closed1);
+        registrationEventRepository.save(closedEvent);
+        registrationEventRepository.save(closed);
+
 
         StudentDetails details = new StudentDetails("111",
                 "Robeil",
@@ -182,7 +211,8 @@ public class StudentRegistrationSystemApplication implements CommandLineRunner {
                 11L,
                 "2022, 02, 02",
                 "2022, 04, 04");
-        kafkaSenderService.sendStudentDetails("student_details1",details);
+
+         //kafkaSenderService.sendStudentDetails("student_details1",details);
 
         //restTemplate.postForLocation(baseUrl+"/{studentId}",registrationRequest1,111);
         //restTemplate.postForLocation(requestUrl+"/{studentId}",listRequest3,111);

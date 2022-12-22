@@ -9,6 +9,6 @@ public interface RegistrationService {
 
     void saveRegistration(Registration registration);
    void deleteRegistration(Long id);
-    RegistrationDTO getRegistration(Long id);
-    Collection<RegistrationDTO> allRegistration();
+    Registration getRegistration(Long id);
+    Collection<Registration> allRegistration();
 }

@@ -23,8 +23,8 @@ public class RegistrationEvent {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
-    @OneToMany //(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn(name = "RegisterEvent_registrationgroup")
+    @OneToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "registerevent_registrationgroup")
     private Collection<RegistrationGroup> registrationGroups;
 
 }

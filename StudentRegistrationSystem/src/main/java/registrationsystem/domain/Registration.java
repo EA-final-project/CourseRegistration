@@ -1,15 +1,15 @@
 package registrationsystem.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Getter
 @Setter
 @Entity
@@ -20,9 +20,10 @@ public class Registration {
 
     private String studentId;
     private Long courseOfferedId;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "registration_students")
-    private Collection<Student> students;
+    private Student student;
+    @JsonManagedReference
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "registration_courseoffering")
     private Collection<CourseOffering> courseOfferings;

@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import registrationsystem.domain.Registration;
 import registrationsystem.domain.Student;
 import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.repository.RegistrationEventRepository;
@@ -13,17 +12,14 @@ import registrationsystem.repository.StudentRepository;
 import registrationsystem.service.UserService;
 import registrationsystem.service.dto.RegistrationDTO;
 import registrationsystem.service.dto.StudentDTO;
-import registrationsystem.util.ConvertToRegistration;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class AdminServiceImpl implements UserService {
 
-    @Autowired
-    private RegistrationEventRepository registrationEventRepository;
     @Autowired
     private RegistrationRepository registrationRepository;
     @Autowired
@@ -84,28 +80,4 @@ public class UserServiceImpl implements UserService {
         }
         return modelMapper.map(foundStudent, StudentDTO.class);
     }
-
-//    @Override
-//    public String readRegistrationEvent(Long studentId, String groupName) {
-//        var registered = registrationEventRepository.re
-//        return registered;
-//    }
-
-//    @Override
-//    public RegistrationDTO processRegistrationRequest(Long id, boolean isAdmin) {
-//
-//        var toProcess = studentRepository.findById(id);
-//
-//        if (toProcess == null) {
-//            throw new CourseExceptionHandler("Student with id: " + id + " not found");
-//        }
-//        if (isAdmin == false) {
-//            throw new CourseExceptionHandler("YOU ARE NOT ALLOWED TO PROCESS the Request");
-//        }
-//
-//        //Registration registration = convertToRegistration.convertTORegistration(id);
-//
-//        Registration registration = new Registration(); //fixme ------>
-//        return modelMapper.map(registration, RegistrationDTO.class);
-//    }
 }

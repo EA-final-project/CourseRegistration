@@ -7,6 +7,5 @@ import registrationsystem.domain.CourseOffering;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
 public interface CourseOfferingRepository extends JpaRepository<CourseOffering, Long> {
 }

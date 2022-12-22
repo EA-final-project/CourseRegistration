@@ -7,6 +7,6 @@ import registrationsystem.domain.Faculty;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
+//@Transactional
 public interface FacultyRepository extends JpaRepository<Faculty, Long> {
 }

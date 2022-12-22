@@ -7,6 +7,6 @@ import registrationsystem.domain.RegistrationRequest;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
+//@Transactional
 public interface RegistrationRequestRepository extends JpaRepository<RegistrationRequest, Long> {
 }

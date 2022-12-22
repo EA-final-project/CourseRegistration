@@ -7,7 +7,7 @@ import registrationsystem.domain.User;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
+//@Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 
 }

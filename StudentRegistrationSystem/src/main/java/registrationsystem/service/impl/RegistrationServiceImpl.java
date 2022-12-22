@@ -4,14 +4,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import registrationsystem.domain.CourseOffering;
 import registrationsystem.domain.Registration;
+import registrationsystem.domain.Student;
 import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.repository.RegistrationRepository;
 import registrationsystem.service.RegistrationService;
+import registrationsystem.service.dto.CourseOfferingDTO;
 import registrationsystem.service.dto.RegistrationDTO;
+import registrationsystem.service.dto.StudentDTO;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
@@ -30,28 +35,20 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public void deleteRegistration(Long id) {
         var registration = registrationRepository.findById(id);
-        if(registration == null){
+        if (registration == null) {
             throw new CourseExceptionHandler("Registration with id : " + " not found");
         }
         registrationRepository.deleteById(id);
     }
 
     @Override
-    public RegistrationDTO getRegistration(Long id) {
-        var registration = registrationRepository.findById(id);
-        if(registration == null){
-            throw new CourseExceptionHandler("Registration with id : " + " not found");
-        }
-        return modelMapper.map(registration,RegistrationDTO.class);
+    public Registration getRegistration(Long id) {
+        return registrationRepository.findById(id).get();
     }
 
     @Override
-    public Collection<RegistrationDTO> allRegistration() {
-        var allRegistration = registrationRepository.findAll();
-
-        return allRegistration.stream()
-                .map(reg -> modelMapper.map(reg, RegistrationDTO.class))
-                .collect(Collectors.toList());
+    public Collection<Registration> allRegistration() {
+        return registrationRepository.findAll();
     }
 
 }

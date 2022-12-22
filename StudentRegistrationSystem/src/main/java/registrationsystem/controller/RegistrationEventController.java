@@ -15,8 +15,8 @@ public class RegistrationEventController {
     @Autowired
     private RegistrationEventService registrationEventService;
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> processRegistrationEvent(@PathVariable Long id, @RequestParam boolean processed) {
+    @PatchMapping ("/{id}")
+    public ResponseEntity<?> processRegistrationEvent(@PathVariable Long id, @RequestParam String processed) {
         registrationEventService.processRegistrationEvent(id,processed);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

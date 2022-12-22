@@ -7,7 +7,7 @@ import registrationsystem.domain.RegistrationGroup;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
+//@Transactional
 public interface RegistrationGroupRepository extends JpaRepository<RegistrationGroup,Long> {
 
 }

@@ -7,6 +7,5 @@ import registrationsystem.domain.Address;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
 public interface AddressRepository extends JpaRepository<Address, Long> {
 }

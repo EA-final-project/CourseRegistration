@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import registrationsystem.domain.Registration;
 import registrationsystem.domain.StudentDetails;
 
 @Service
@@ -26,5 +27,7 @@ public class KafkaSenderService {
         }
 
     }
+
+
 
 }

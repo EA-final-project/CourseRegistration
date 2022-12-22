@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
-@Transactional
+//@Transactional
 public interface CourseRepository extends JpaRepository<Course, Long> {
    // @Query("select c from Course c where c.code =: code")
     Optional<Course> findCourseByCode(String code);

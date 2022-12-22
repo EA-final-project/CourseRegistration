@@ -14,11 +14,6 @@ public class CourseOfferingController {
     @Autowired
     private CourseOfferingService service;
 
-    @PostMapping
-    public ResponseEntity<?> addCourseOffer(@RequestBody CourseOffering course){
-        service.addCourseOffer(course);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
-    }
     @GetMapping("/{id}")
     public ResponseEntity<?> getCourseOffer(@PathVariable Long id){
         var course = service.getCourseOffer(id);

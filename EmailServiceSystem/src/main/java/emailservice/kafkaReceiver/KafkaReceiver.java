@@ -16,7 +16,7 @@ public class KafkaReceiver {
     private StudentDetailsRepository studentDetailsRepository;
 
     //properties = {"spring.json.value.default.type=com.something.model.TransactionEventPayload"}
-    @KafkaListener(topics = {"student_details1"})
+    @KafkaListener(topics = {"student_details"})
     public void receive(@Payload String studentDetails) {
         ObjectMapper objectMapper = new ObjectMapper();
         try{

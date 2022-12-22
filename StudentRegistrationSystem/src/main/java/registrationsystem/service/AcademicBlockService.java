@@ -10,7 +10,8 @@ public interface AcademicBlockService{
 
     void deleteBlock(Long id);
     AcademicBlockDTO getBlock(Long id);
-    void addBlock(CourseOffering offering);
+    void addCourseOfferingToBlock(Long blockId, CourseOffering offering);
+    void addBlock(AcademicBlock block);
     Collection<AcademicBlockDTO> getAllBlocks();
     AcademicBlockDTO updateBlock(Long id, AcademicBlock block);
 

@@ -7,6 +7,5 @@ import registrationsystem.domain.AcademicBlock;
 import javax.transaction.Transactional;
 
 @Repository
-@Transactional
 public interface AcademicBlockRepository extends JpaRepository<AcademicBlock, Long> {
 }

@@ -24,6 +24,8 @@ public class EmailServiceApplication implements CommandLineRunner {
     private StudentDetailsService studentDetailsService;
     @Autowired
     private EmailSenderService emailSenderService;
+    @Autowired
+
 
     public static void main(String[] args) {
         SpringApplication.run(EmailServiceApplication.class, args);
@@ -33,19 +35,19 @@ public class EmailServiceApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         List<StudentDetails> allStudentDetails = studentDetailsService.getAllAllStudents();
-        String subject = "Registration Event Reminder!";
-        String body = null;
 
         Collection<StudentDetails> kafkaStudent = new ArrayList<>();
 
         for(StudentDetails student: allStudentDetails){
-            kafkaStudent.add(student);
+            emailSenderService.sendEmail(
+                    student.getEmail(),
+                    "Registration reminder ",
+                    "Dear Student your next registration is open in 8 hours and will open from  " + student.getStartDate().toString()  + " till " +  student.getLastName().toString()
+            );
         }
-//        kafkaStudent.forEach(stu -> emailSenderService.sendEmail(
-//                stu.getEmail(),
-//                subject,
-//                stu.getEventId() + " " +stu.getStartDate() +" "+stu.getEndDate()
-//        ));
-        emailSenderService.sendEmail("silukeen1@gmail.com","Hey there","Getting email from course registrar");
+
+        studentDetailsService.sendReminder();
+
+        // emailSenderService.sendEmail("silukeen1@gmail.com","Hey there","Getting email from course registrar");
     }
 }

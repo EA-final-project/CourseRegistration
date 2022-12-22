@@ -10,7 +10,6 @@ import registrationsystem.service.RegistrationGroupService;
 
 @Service
 public class RegistrationGroupServiceImpl implements RegistrationGroupService {
-
     @Autowired
     private RegistrationGroupRepository registrationGroupRepository;
 

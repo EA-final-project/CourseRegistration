@@ -2,6 +2,7 @@ package registrationsystem.service.dto;
 
 import lombok.*;
 import registrationsystem.domain.Address;
+import registrationsystem.domain.CourseOffering;
 import registrationsystem.domain.RegistrationRequest;
 
 import javax.persistence.CascadeType;
@@ -18,9 +19,7 @@ import java.util.Collection;
 public class RegistrationDTO {
     private Long id;
     private String studentId;
-    private String name;
-    private String email;
-    private Address mailingAddress;
-    private Address homeAddress;
-    private Collection<RegistrationRequest> registrationRequests;
+    private Long courseOfferedId;
+    private Collection<StudentDTO> studentDTOS;
+    private Collection<CourseOfferingDTO> courseOfferingDTOS;
 }

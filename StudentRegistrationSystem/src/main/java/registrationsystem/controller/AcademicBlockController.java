@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import registrationsystem.domain.AcademicBlock;
 import registrationsystem.domain.CourseOffering;
+import registrationsystem.repository.CourseOfferingRepository;
 import registrationsystem.service.AcademicBlockService;
 
 @RestController
@@ -14,11 +15,18 @@ import registrationsystem.service.AcademicBlockService;
 public class AcademicBlockController {
 
     @Autowired
+    private AcademicBlockService academicBlockService;
+    @Autowired
     private AcademicBlockService service;
+    @PostMapping
+    public ResponseEntity<?> addBlock(@RequestBody AcademicBlock academicBlock){
+        service.addBlock(academicBlock);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
 
-    @PostMapping("/{blockid}/addcourseoffering")
-    public ResponseEntity<?> addBlock(@PathVariable Long blockid, @RequestBody CourseOffering offering) {
-        //service.addBlock(blockid, offering); // fixme ----->
+    @PostMapping("/{blockId}/addcourseoffering")
+    public ResponseEntity<?> addCourseOfferingToBlock(@PathVariable Long blockId, @RequestBody CourseOffering offering) {
+           academicBlockService.addCourseOfferingToBlock(blockId,offering);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

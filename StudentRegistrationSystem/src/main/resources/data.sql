@@ -1,0 +1,98 @@
+-- #
+-- # --  creating faculty
+-- # INSERT INTO course_registration_db.faculty (id, email, fist_name, last_name, title)
+-- # VALUES (1, 'renee@miueedu', 'Renee', 'De Joe', 'Professor');
+-- # INSERT INTO course_registration_db.faculty (id, email, fist_name, last_name, title)
+-- # VALUES (2, 'peyman@miueedu', 'Payman', 'Salek', 'Professor');
+-- # INSERT INTO course_registration_db.faculty (id, email, fist_name, last_name, title)
+-- # VALUES (3, 'bruce@miueedu', 'Bruce', 'Laster', 'Professor');
+-- # INSERT INTO course_registration_db.faculty (id, email, fist_name, last_name, title)
+-- # VALUES (4, 'Obina@miueedu', 'Obina', 'Kalu', 'Professor');
+-- # INSERT INTO course_registration_db.faculty (id, email, fist_name, last_name, title)
+-- # VALUES (5, 'Joseph@miueedu', 'Joseph', 'Lerman', 'Professor');
+-- #
+-- # -- creating group
+-- # INSERT INTO course_registration_db.registrationgroup (id, track, registerevent_registrationgroup)
+-- # VALUES (1, 'MPP', 4);
+-- # INSERT INTO course_registration_db.registrationgroup (id, track, registerevent_registrationgroup)
+-- # VALUES (2, 'FPP', 4);
+-- #
+-- # -- crating adamic block
+-- # INSERT INTO course_registration_db.academicblock (id, code, end_date, name, semester, start_date, registrationgroup_academicblocks)
+-- # VALUES (1, 'CS590', '2023-02-06', 'January', 'Spring', '2023-01-16', 2);
+-- # INSERT INTO course_registration_db.academicblock (id, code, end_date, name, semester, start_date, registrationgroup_academicblocks)
+-- # VALUES (2, 'CS544', '2023-03-06', 'February', 'Spring', '2023-02-06', 2);
+-- # INSERT INTO course_registration_db.academicblock (id, code, end_date, name, semester, start_date, registrationgroup_academicblocks)
+-- # VALUES (3, 'CS477', '2023-04-06', 'March', 'Spring', '2023-03-06', 2);
+-- # INSERT INTO course_registration_db.academicblock (id, code, end_date, name, semester, start_date, registrationgroup_academicblocks)
+-- # VALUES (4, 'CS425', '2023-03-06', 'February', 'Spring', '2023-02-06', 1);
+-- # INSERT INTO course_registration_db.academicblock (id, code, end_date, name, semester, start_date, registrationgroup_academicblocks)
+-- # VALUES (5, 'CS422', '2023-04-06', 'March', 'Spring', '2023-03-06', 1);
+-- #
+-- # -- creating address
+-- # INSERT INTO course_registration_db.address (id, city, country_origin, postal_code, state_province, street)
+-- # VALUES (1, 'Fairfield', 'USA', 52557, 'IOWA', '1000 N 4th street');
+-- # INSERT INTO course_registration_db.address (id, city, country_origin, postal_code, state_province, street)
+-- # VALUES (2, 'Chicago', 'USA', 21243, 'IL', '345 S avenue ');
+-- #
+-- # -- creating course
+-- # INSERT INTO course_registration_db.course (id, code, description, name)
+-- # VALUES (1, 'CS590', 'Software Architecture', 'SA');
+-- # INSERT INTO course_registration_db.course (id, code, description, name)
+-- # VALUES (2, 'CS544', 'Enterprise Architecture', 'EA');
+-- # INSERT INTO course_registration_db.course (id, code, description, name)
+-- # VALUES (3, 'CS477', 'Web Application Programming', 'WAP');
+-- # INSERT INTO course_registration_db.course (id, code, description, name)
+-- # VALUES (4, 'CS425', 'Software Engineering', 'SE');
+-- # INSERT INTO course_registration_db.course (id, code, description, name)
+-- # VALUES (5, 'CS422', 'Database Managements System', 'DBMS');
+-- #
+-- # -- creating
+-- # INSERT INTO course_registration_db.courseoffering (id, available_seats, capacity, code, initial, academicblock_courseoffering, course_id, faculty_id, registration_courseoffering)
+-- # VALUES (1, 30, 30, 'CS590', 'R.D', 1, 1, 1, null);
+-- # INSERT INTO course_registration_db.courseoffering (id, available_seats, capacity, code, initial, academicblock_courseoffering, course_id, faculty_id, registration_courseoffering)
+-- # VALUES (2, 30, 30, 'CS544', 'P.S', 2, 2, 2, null);
+-- # INSERT INTO course_registration_db.courseoffering (id, available_seats, capacity, code, initial, academicblock_courseoffering, course_id, faculty_id, registration_courseoffering)
+-- # VALUES (3, 30, 30, 'CS477', 'B.L', 3, 3, 3, null);
+-- # INSERT INTO course_registration_db.courseoffering (id, available_seats, capacity, code, initial, academicblock_courseoffering, course_id, faculty_id, registration_courseoffering)
+-- # VALUES (4, 30, 30, 'CS425', 'O.K', 4, 4, 4, null);
+-- # INSERT INTO course_registration_db.courseoffering (id, available_seats, capacity, code, initial, academicblock_courseoffering, course_id, faculty_id, registration_courseoffering)
+-- # VALUES (5, 30, 30, 'CS422', 'J.L', 5, 5, 5, null);
+-- #
+-- # -- registration event
+-- # INSERT INTO course_registration_db.registrationevent (id, end_date, start_date)
+-- # VALUES (3, '2022-12-25', '2022-12-15');
+-- # INSERT INTO course_registration_db.registrationevent (id, end_date, start_date)
+-- # VALUES (4, '2022-12-17', '2022-12-12');
+-- # INSERT INTO course_registration_db.registrationevent (id, end_date, start_date)
+-- # VALUES (5, '2022-12-29', '2022-12-10');
+-- # INSERT INTO course_registration_db.registrationevent (id, end_date, start_date)
+-- # VALUES (9, '2022-12-18', '2022-12-13');
+-- #
+-- #
+-- #
+-- # -- registration request
+-- # INSERT INTO course_registration_db.registrationrequest (id, priority_number, registrationrequest_courseoffering, registrationrequest_student)
+-- # VALUES (1, 1, 1, 2);
+-- # INSERT INTO course_registration_db.registrationrequest (id, priority_number, registrationrequest_courseoffering, registrationrequest_student)
+-- # VALUES (2, 1, 2, null);
+-- # INSERT INTO course_registration_db.registrationrequest (id, priority_number, registrationrequest_courseoffering, registrationrequest_student)
+-- # VALUES (3, 1, 3, 4);
+-- # INSERT INTO course_registration_db.registrationrequest (id, priority_number, registrationrequest_courseoffering, registrationrequest_student)
+-- # VALUES (4, 1, 4, 3);
+-- # INSERT INTO course_registration_db.registrationrequest (id, priority_number, registrationrequest_courseoffering, registrationrequest_student)
+-- # VALUES (5, 1, 5, null);
+-- # INSERT INTO course_registration_db.registrationrequest (id, priority_number, registrationrequest_courseoffering, registrationrequest_student)
+-- # VALUES (6, 1, 5, 5);
+-- #
+-- # -- student
+-- # INSERT INTO course_registration_db.student (id, email, first_name, last_name, student_id, home_address_id, mailing_address_id)
+-- # VALUES (1, 'robeilaregawi@miu.edu', 'Robeil', 'Aregawi', '111', 1, 2);
+-- # INSERT INTO course_registration_db.student (id, email, first_name, last_name, student_id, home_address_id, mailing_address_id)
+-- # VALUES (2, 'stuyishimire@miu.edu', 'Serapie', 'Tuyishimire', '222', 1, 2);
+-- # INSERT INTO course_registration_db.student (id, email, first_name, last_name, student_id, home_address_id, mailing_address_id)
+-- # VALUES (3, 'regualcse@gmail.ocm', 'Regaul', 'Karim', '333', 1, 2);
+-- # INSERT INTO course_registration_db.student (id, email, first_name, last_name, student_id, home_address_id, mailing_address_id)
+-- # VALUES (4, 'robl@miu.edu', 'Robel', 'Issak', '444', 1, 2);
+-- # INSERT INTO course_registration_db.student (id, email, first_name, last_name, student_id, home_address_id, mailing_address_id)
+-- # VALUES (5, 'misghna@gmail.ocm', 'Misghina', 'Niguse', '555', 1, 2);

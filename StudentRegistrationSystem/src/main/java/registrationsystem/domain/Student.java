@@ -9,7 +9,7 @@ import java.util.Collection;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+
 @Getter
 @Setter
 @Entity
@@ -27,9 +27,9 @@ public class Student {
     @ManyToOne //(cascade = CascadeType.MERGE)
     private Address homeAddress;
     //@JsonManagedReference
-    @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "student")
     private Collection<RegistrationRequest> registrationRequests;
     @JsonBackReference
-    @ManyToMany(mappedBy = "students", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "students")
     private Collection<RegistrationGroup> registrationGroups;
 }
