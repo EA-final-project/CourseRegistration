@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import registrationsystem.domain.*;
 import registrationsystem.exception.CourseExceptionHandler;
 import registrationsystem.kafkaSender.KafkaSenderService;
+import registrationsystem.repository.CourseOfferingRepository;
 import registrationsystem.repository.RegistrationEventRepository;
 import registrationsystem.repository.RegistrationRepository;
 import registrationsystem.repository.StudentRepository;
@@ -16,6 +17,7 @@ import registrationsystem.service.dto.CourseOfferingDTO;
 import registrationsystem.service.dto.RegistrationEventDTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class RegistrationEventServiceImpl implements RegistrationEventService {
+    @Autowired
+    private CourseOfferingRepository courseOfferingRepository;
     @Autowired
     private RegistrationRepository registrationRepository;
 
@@ -49,27 +53,16 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     public void processRegistrationEvent(Long id, String processed) {
 
         var eventToProcess = registrationEventRepository.findById(id);
-        Student student = studentRepository.findById(id).get();
-        System.out.println(student.getFirstName());
-        if (eventToProcess == null || processed == "false") {
-            throw new CourseExceptionHandler("The Registration Event with id " + id + " not found OR not allowed to process.");
-        }
+//        Student student = studentRepository.findById(id).get();
         //convertor
         Collection<RegistrationRequest> allRequests = new ArrayList<>();
         RegistrationStatus status = recentRegistrationEvent(id);
-        System.out.println("Student id "+student.getStudentId());
 
         RegistrationEvent recentEvent = registrationEventRepository.findFirstByOrderByStartDateDesc();
 
         //this event must be closed
         if (status == RegistrationStatus.CLOSED) { ///fixme ------->>>>
             System.out.println("processing the current event");
-//            eventToProcess.stream()
-//                    .flatMap(rg -> rg.getRegistrationGroups().stream())
-//                    .flatMap(gr -> gr.getStudents().stream())
-//                    .filter(s -> s.getStudentId().equals(student.getStudentId()))
-//                    .findAny()
-//                    .get();
 
             allRequests = eventToProcess.stream()
 
@@ -83,24 +76,24 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
                     kafkaSenderService.sendStudentDetails("student-details", new StudentDetails(
                             registration.getStudent().getStudentId(), registration.getStudent().getFirstName(),
                             registration.getStudent().getLastName(), registration.getStudent().getEmail(),
-                            eventToProcess.get().getId(), eventToProcess.get().getStartDate().toString(),
-                            eventToProcess.get().getEndDate().toString()
+                            eventToProcess.get().getId(), eventToProcess.get().getStartDate(),
+                            eventToProcess.get().getEndDate()
                     ));
                 });
 
                 System.out.println("Converting request to registration");
 
         } else {
-            throw new CourseExceptionHandler("The Registration Event is currently open or it is in-progress");
+            System.out.println("The Registration Event is currently open or it is in-progress");
         }
     }
     public RegistrationStatus recentRegistrationEvent(Long id) {
 
         var latestEvent = registrationEventRepository.findById(id).get();
 
-        LocalDate currentTime = LocalDate.now(); // 18
-        LocalDate startDate = latestEvent.getStartDate();
-        LocalDate endDate = latestEvent.getEndDate();
+        LocalDateTime currentTime = LocalDate.now().atStartOfDay(); // 18
+        LocalDateTime startDate = latestEvent.getStartDate();
+        LocalDateTime endDate = latestEvent.getEndDate();
 
         if (currentTime.isAfter(startDate) && currentTime.isBefore(endDate)) {
             log.info("Open registration");
@@ -118,19 +111,20 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         List<Registration> listRegistration = new ArrayList<>();
 
         for (RegistrationRequest request : requests) {
+            int classCapacity = registrationRepository.findAll().size();
 
             if (request.getCourseOffering().getAvailableSeats() > 0) {
-                System.out.println("cccc-----");
-                int classCapacity = registrationRepository.findAll().size();
-                request.getCourseOffering().calculateAvailableSeats(classCapacity);
-                 Registration registration = new Registration(
-                        request.getId(), request.getStudent().getStudentId(),
-                        request.getCourseOffering().getCourse().getId(), request.getStudent(),
-                        Arrays.asList(request.getCourseOffering()));
 
+                request.getCourseOffering().calculateAvailableSeats(classCapacity);
+                 Registration registration = new Registration(request.getId(),request.getStudent(),
+                        request.getCourseOffering());
+
+                int availableSeats = request.getCourseOffering().getAvailableSeats();
+
+                courseOfferingRepository.updateAvailableSeats(availableSeats);
                 registrationService.saveRegistration(registration);
+
                 listRegistration.add(registration);
-                System.out.println("Saving registration and creating" + registration.toString());
             } else {
                 return null;
             }
@@ -143,7 +137,7 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         var allRegistrations = registrationEventRepository.findRegistrationEventsById(studentId); //working
 
         if (allRegistrations == null) {
-            throw new CourseExceptionHandler("No registrationEvent found for student with id " + studentId + " not found");
+            System.out.println("No registrationEvent found for student with id " + studentId + " not found");
         }
         return allRegistrations.stream()
                 .map(event -> modelMapper.map(event, RegistrationEventDTO.class))
@@ -160,7 +154,7 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
             event.setRegistrationGroups(registrationEvent.getRegistrationGroups());
             registrationEventRepository.save(event);
         } else {
-            throw new CourseExceptionHandler("Registration with id " + id + " not found");
+            System.out.println("Registration with id " + id + " not found");
         }
         return modelMapper.map(event, RegistrationEventDTO.class);
     }
@@ -169,7 +163,7 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
     public RegistrationEventDTO getRegistrationEvent(Long id) {
         var event = registrationEventRepository.findById(id);
         if (event == null) {
-            throw new CourseExceptionHandler("Registration with id " + id + " not found");
+            System.out.println("Registration with id " + id + " not found");
         }
         return modelMapper.map(event, RegistrationEventDTO.class);
     }
@@ -188,9 +182,9 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
 
         var latestEvent = registrationEventRepository.findFirstByOrderByStartDateDesc();
 
-        LocalDate currentTime = LocalDate.now(); // 18
-        LocalDate startDate = latestEvent.getStartDate();
-        LocalDate endDate = latestEvent.getEndDate();
+        LocalDateTime currentTime = LocalDate.now().atStartOfDay(); // 18
+        LocalDateTime startDate = latestEvent.getStartDate();
+        LocalDateTime endDate = latestEvent.getEndDate();
 
         if (currentTime.isAfter(startDate) && currentTime.isBefore(endDate)) {
             log.info("Open registration");
@@ -219,11 +213,10 @@ public class RegistrationEventServiceImpl implements RegistrationEventService {
         var allEvent = studentRepository.findStudentByStudentId(studentId);
 
         return allEvent.stream()
-                .flatMap(event -> event.getRegistrationGroups().stream())
-                .filter(group -> group.getTrack().equals(track))
-                .flatMap(block -> block.getAcademicBlocks().stream())
-                .flatMap(stu -> stu.getCourseOfferings().stream())
+                .flatMap(eve -> eve.getRegistrationRequests().stream())
+                .map(offer -> offer.getCourseOffering())
                 .map(st -> modelMapper.map(st, CourseOfferingDTO.class))
                 .collect(Collectors.toList());
     }
+
 }

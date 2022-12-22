@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -25,9 +26,9 @@ public class AcademicBlock {
     private String name;
     private String semester;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
+    private LocalDateTime startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate endDate;
+    private LocalDateTime endDate;
     @JsonManagedReference
     @OneToMany(mappedBy = "academicBlocks",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Collection<CourseOffering> courseOfferings;

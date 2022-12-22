@@ -33,7 +33,7 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
     public CourseOfferingDTO getCourseOffer(Long id) {
         var courseOffer = repository.findById(id).get();
         if (courseOffer == null) {
-            throw new CourseExceptionHandler("CourseOffer with Id :" + id + " not found");
+            System.out.println("CourseOffer with Id :" + id + " not found");
         }
         log.info("CourseOffer getting with id " + id);
         return modelMapper.map(courseOffer, CourseOfferingDTO.class);
@@ -47,17 +47,6 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
                 .map(offer -> modelMapper.map(offer, CourseOfferingDTO.class))
                 .collect(Collectors.toList());
     }
-
-//    @Override
-//    public HashMap<Boolean, Course> selectCourse(Collection<Course> listCourse, String code) {
-//
-//        HashMap<Boolean, Course> selectOne = new HashMap<>();
-//        for (Course c : listCourse) {
-//            if (c.getCode().equals(code))
-//                selectOne.put(true, c);
-//        }
-//        return selectOne;
-//    }
 
     @Override
     public void addCourseOffer(CourseOffering courseOffering) {
@@ -76,8 +65,9 @@ public class CourseOfferingServiceImpl implements CourseOfferingService {
             updateOffer.setCapacity(course.getCapacity());
             updateOffer.setAvailableSeats(course.getAvailableSeats());
             repository.save(updateOffer);
-        } else {
-            throw new CourseExceptionHandler("CourseOffering with id: " + id + " not found");
+        }
+        else {
+            System.out.println("CourseOffering with id: " + id + " not found");
         }
         return modelMapper.map(updateOffer, CourseOfferingDTO.class);
     }

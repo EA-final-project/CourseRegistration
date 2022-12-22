@@ -31,7 +31,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO getCourse(Long id) {
         var course = courseRepository.findById(id);
         if(course == null){
-            throw new CourseExceptionHandler("Course with id  "+ id + " not found");
+            System.out.println("Course with id  "+ id + " not found");
         }
         return modelMapper.map(course, CourseDTO.class);
     }
@@ -51,8 +51,9 @@ public class CourseServiceImpl implements CourseService {
             foundCourse.setName(course.getName());
             foundCourse.setDescription(course.getDescription());
             courseRepository.save(foundCourse);
-        } else {
-            throw new CourseExceptionHandler("Course with id : "+ id + " not found");
+        }
+        else {
+            System.out.println("Course with id : "+ id + " not found");
         }
         return modelMapper.map(foundCourse, CourseDTO.class);
     }
@@ -70,7 +71,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO getCourseByCode(String code) {
         var course = courseRepository.findCourseByCode(code).get();
         if(course == null){
-            throw new CourseExceptionHandler("Course with code "+ code + " not found");
+            System.out.println("Course with code "+ code + " not found");
         }
         return modelMapper.map(course, CourseDTO.class);
     }

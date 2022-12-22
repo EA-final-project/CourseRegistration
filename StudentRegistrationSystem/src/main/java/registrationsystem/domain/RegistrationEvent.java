@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 
@@ -19,10 +20,10 @@ public class RegistrationEvent {
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate startDate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate endDate;
+
+    private LocalDateTime startDate;
+
+    private LocalDateTime endDate;
     @OneToMany (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "registerevent_registrationgroup")
     private Collection<RegistrationGroup> registrationGroups;

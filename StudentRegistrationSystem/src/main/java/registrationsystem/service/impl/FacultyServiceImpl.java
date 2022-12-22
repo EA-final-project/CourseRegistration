@@ -31,7 +31,7 @@ public class FacultyServiceImpl implements FacultyService {
         var faculty = facultyRepository.findById(id).get();
 
         if(faculty == null){
-            throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
+            System.out.println("Faculty with id "+id+ " not found");
         }
         return modelMapper.map(faculty,FacultyDTO.class);
     }
@@ -56,8 +56,9 @@ public class FacultyServiceImpl implements FacultyService {
             updateFaculty.setTitle(faculty.getTitle());
             updateFaculty.setEmail(faculty.getEmail());
             facultyRepository.save(updateFaculty);
-        } else {
-            throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
+        }
+        else {
+            System.out.println("Faculty with id "+id+ " not found");
         }
         return modelMapper.map(updateFaculty, FacultyDTO.class);
     }
@@ -66,7 +67,7 @@ public class FacultyServiceImpl implements FacultyService {
         var toDelete = facultyRepository.findById(id);
 
         if(toDelete == null){
-            throw new CourseExceptionHandler("Faculty with id "+id+ " not found");
+            System.out.println("Faculty with id "+id+ " not found");
         }
         facultyRepository.deleteById(id);
     }

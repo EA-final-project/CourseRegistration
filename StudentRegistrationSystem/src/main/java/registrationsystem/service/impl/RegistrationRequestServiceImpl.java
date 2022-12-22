@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RegistrationRequestServiceImpl implements RegistrationRequestService {
     @Autowired
-    private RegistrationRepository registrationRepository;
-    @Autowired
     private RegistrationRequestRepository registrationRequestRepository;
     @Autowired
     private RegistrationEventRepository registrationEventRepository;
@@ -50,7 +48,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
     public RegistrationRequestDTO getRegistrationRequest(Long id) {
         var request = repository.findById(id);
         if (request == null) {
-            throw new CourseExceptionHandler("Registration Request with id " + id + " not found");
+            System.out.println("Registration Request with id " + id + " not found");
         }
         return modelMapper.map(request, RegistrationRequestDTO.class);
     }
@@ -81,8 +79,8 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
                 StudentDetails studentDetails = new StudentDetails(
                         student.getStudentId(), student.getFirstName(),
                         student.getLastName(), student.getEmail(),
-                        latestEvent.getId(), latestEvent.getStartDate().toString(),
-                        latestEvent.getEndDate().toString()
+                        latestEvent.getId(), latestEvent.getStartDate(),
+                        latestEvent.getEndDate()
                 );
                 kafkaSenderService.sendStudentDetails("student_details1",studentDetails);
             }
@@ -108,7 +106,7 @@ public class RegistrationRequestServiceImpl implements RegistrationRequestServic
             updateRequest.setPriorityNumber(request.getPriorityNumber());
             repository.save(updateRequest);
         } else {
-            throw new CourseExceptionHandler("Registration Request with id " + id + " not found");
+            System.out.println("Registration Request with id " + id + " not found");
         }
         return modelMapper.map(updateRequest, RegistrationRequestDTO.class);
     }

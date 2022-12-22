@@ -59,7 +59,7 @@ public class AdminServiceImpl implements UserService {
     public StudentDTO getStudent(String studentId) {
         var student = studentRepository.findStudentByStudentId(studentId);
         if (student == null) {
-            throw new CourseExceptionHandler("Student with id " + studentId + " not found");
+            System.out.println("Student with id " + studentId + " not found");
         }
         return modelMapper.map(student, StudentDTO.class);
     }
@@ -75,8 +75,9 @@ public class AdminServiceImpl implements UserService {
             foundStudent.setMailingAddress(student.getMailingAddress());
             foundStudent.setRegistrationRequests(student.getRegistrationRequests());
             studentRepository.save(foundStudent);
-        } else {
-            throw new CourseExceptionHandler("Student with id " + studentId + " not found");
+        }
+        else {
+            System.out.println("Student with id " + studentId + " not found");
         }
         return modelMapper.map(foundStudent, StudentDTO.class);
     }

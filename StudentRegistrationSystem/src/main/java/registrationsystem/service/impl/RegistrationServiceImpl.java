@@ -24,8 +24,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Autowired
     private RegistrationRepository registrationRepository;
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Override
     public void saveRegistration(Registration registration) {
@@ -36,7 +34,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void deleteRegistration(Long id) {
         var registration = registrationRepository.findById(id);
         if (registration == null) {
-            throw new CourseExceptionHandler("Registration with id : " + " not found");
+            System.out.println("Registration with id : " + " not found");
         }
         registrationRepository.deleteById(id);
     }

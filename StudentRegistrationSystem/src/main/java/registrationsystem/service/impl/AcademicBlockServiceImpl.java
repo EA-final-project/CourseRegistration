@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AcademicBlockServiceImpl implements AcademicBlockService {
     @Autowired
-    private CourseOfferingRepository courseOfferingRepository;
-    @Autowired
     private AcademicBlockRepository academicBlockRepository;
     @Autowired
     private ModelMapper modelMapper;
@@ -43,7 +41,7 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
         var block = academicBlockRepository.findById(id).get();
         if (block == null) {
             log.info("Block with Id :" + id + " not found");
-            throw new CourseExceptionHandler("Block with Id :" + id + " not found");
+            System.out.println("Block with Id :" + id + " not found");
         }
         return modelMapper.map(block, AcademicBlockDTO.class);
     }
@@ -71,8 +69,9 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
             updateBlock.setCourseOfferings(block.getCourseOfferings());
             log.info("updating Block with Id :" + id);
             academicBlockRepository.save(updateBlock);
-        } else {
-            throw new CourseExceptionHandler("Block with Id :" + id + " not found");
+        }
+        else {
+            System.out.println("Block with Id :" + id + " not found");
         }
         return modelMapper.map(updateBlock, AcademicBlockDTO.class);
     }
@@ -82,7 +81,7 @@ public class AcademicBlockServiceImpl implements AcademicBlockService {
         var toDelete = academicBlockRepository.findById(id);
         if (toDelete == null) {
             log.info("Deleting Block with Id :" + id);
-            throw new CourseExceptionHandler("Block with Id :" + id + " not found");
+            System.out.println("Block with Id :" + id + " not found");
         }
         academicBlockRepository.deleteById(id);
     }

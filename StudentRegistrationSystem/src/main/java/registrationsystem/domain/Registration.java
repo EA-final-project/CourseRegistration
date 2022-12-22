@@ -18,14 +18,12 @@ public class Registration {
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String studentId;
-    private Long courseOfferedId;
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     @JoinColumn(name = "registration_students")
     private Student student;
     @JsonManagedReference
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "registration_courseoffering")
-    private Collection<CourseOffering> courseOfferings;
+    private CourseOffering courseOfferings;
 
 }

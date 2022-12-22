@@ -22,6 +22,7 @@ public class KafkaReceiver {
         try{
 
             Object student =  objectMapper.readValue(studentDetails,Object.class);
+            System.out.println(student.toString());
             StudentDetails kafkaStudent = objectMapper.readValue(studentDetails, new TypeReference<StudentDetails>(){});
             studentDetailsRepository.save(kafkaStudent);
             System.out.println("Receiving StudentDetails object " + student.toString());

@@ -22,14 +22,14 @@ public class Student {
     private String firstName;
     private String lastName;
     private String email;
-    @ManyToOne //(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) //default joinColumn & eager
+    @ManyToOne
     private Address mailingAddress;
-    @ManyToOne //(cascade = CascadeType.MERGE)
+    @ManyToOne (cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address homeAddress;
     //@JsonManagedReference
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "student")
     private Collection<RegistrationRequest> registrationRequests;
-    @JsonBackReference
-    @ManyToMany( cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "students")
-    private Collection<RegistrationGroup> registrationGroups;
+//    @JsonBackReference
+//    @ManyToMany( cascade = CascadeType.PERSIST, mappedBy = "students")
+//    private Collection<RegistrationGroup> registrationGroups;
 }
